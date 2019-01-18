@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import maskUSPhone from '../src/demo';
+import maskUSPhone from '../src/demo/demo';
 
 const testSamples = [
   { input: null, expectedResult: null, description: 'should return null when null is passed' },
