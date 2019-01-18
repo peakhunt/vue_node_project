@@ -31,7 +31,11 @@
   "nyc": {
     "reporter": [
       "lcov",
-    "text"
+      "text"
     ]
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "winston": "^3.1.0"
   }
 }

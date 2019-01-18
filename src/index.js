@@ -1,11 +1,3 @@
-function sayHiTo(name) {
-  return `Hi, ${name}`;
-}
+const webif_init = require('./webif');
 
-function ignoreWarning(name) {
-  return name;
-}
-
-const message = sayHiTo('Bruno');
-
-ignoreWarning(message);
+webif_init();
