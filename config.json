@@ -4,5 +4,17 @@
   },
   "web": {
     "port": 8080
-  }
+  },
+  "user": [
+    {
+      "id": "admin",
+      "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+      "admin": true
+    },
+    {
+      "id": "hkim",
+      "password": "ef7060071bb8a68bb66c4b942bac192164e91d9c25b8163b65f60ecc7e20a04c",
+      "admin": false
+    }
+  ]
 }
