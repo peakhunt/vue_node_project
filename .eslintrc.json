@@ -2,7 +2,8 @@
   "extends": "airbnb-base",
   "rules": {
     "camelcase": [0, {"properties": "never"}],
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "prefer-destructuring": ["error", {"object": false, "array": false}]
   },
   "env": {
     "mocha": true
