@@ -1,12 +1,16 @@
 const express = require('express');
 const logger = require('../logger');
+const config = require('../config');
 
-function webinf_init() {
+function webintf_init() {
+  logger.debug('webintf_init');
+  logger.debug(config);
+
   const app = express();
-  const port = 8080;
+  const { data: { web: { port } } } = config;
 
   app.get('/', (req, res) => res.send('Hello World!'));
   app.listen(port, () => logger.info(`Example app listening on port ${port}!`));
 }
 
-module.exports = webinf_init;
+module.exports = webintf_init;

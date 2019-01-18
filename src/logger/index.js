@@ -1,10 +1,13 @@
 const { createLogger, format, transports } = require('winston');
+const config = require('../config');
 
 const {
   combine,
   timestamp,
   printf
 } = format;
+
+const { data: { log: { level } } } = config;
 
 const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
 
@@ -14,11 +17,14 @@ const logger = createLogger({
     myFormat
   ),
   transports: [
-    new transports.Console(),
+    new transports.Console({ level }),
     new transports.File({
-      filename: 'my_log.log'
+      filename: 'my_log.log',
+      level
     })
   ]
 });
+
+logger.info('logger created');
 
 module.exports = logger;
