@@ -14,7 +14,7 @@ function get_login_info(id) {
 function login_user(user) {
   logger.info(`${user.id} logged in`);
 
-  const { data: { user_mgmt: { super_secret: secret } } } = config;
+  const secret = config.data.user_mgmt.super_secret;
   const uinfo = {
     user,
     access_time: moment()
@@ -35,7 +35,7 @@ function login(id, password) {
     return { status: false, token: undefined };
   }
 
-  const { data: { user_mgmt: { users } } } = config;
+  const users = config.data.user_mgmt.users;
 
   const csum = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
 
@@ -79,7 +79,7 @@ function authorize(id, token) {
     return false;
   }
 
-  const { data: { user_mgmt: { timeout_in_secs: timeout } } } = config;
+  const timeout = config.data.user_mgmt.timeout_in_secs;
   const diff = now.diff(linfo.uinfo.access_time, 'seconds');
 
   if (diff > timeout) {
@@ -101,7 +101,7 @@ function decode(token, cb) {
     return;
   }
 
-  const { data: { user_mgmt: { super_secret: secret } } } = config;
+  const secret = config.data.user_mgmt.super_secret;
 
   jwt.verify(token, secret, (err, decoded) => {
     cb(err, decoded);
