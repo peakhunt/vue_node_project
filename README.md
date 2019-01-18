@@ -1,1 +1,1 @@
-# my vue nodejs project template
+# vue_node_project
