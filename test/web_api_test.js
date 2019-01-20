@@ -17,7 +17,7 @@ chai.use(chaiHttp);
 const csum1 = crypto.createHash('sha256').update('password', 'utf8').digest('hex');
 
 // parent block
-describe('web api test', () => {
+describe('public api test', () => {
   beforeEach((done) => {
     // before each test we do something
     // nothing to do for now
@@ -116,5 +116,44 @@ describe('web api test', () => {
           })
     });
 
+  });
+});
+
+describe('private api test', () => {
+  beforeEach((done) => {
+    // before each test we do something
+    // nothing to do for now
+    done();
+  });
+
+  describe('GET /api/private/non_existing', () => {
+    it('no authorization header', (done) => {
+      chai.request(server)
+          .get('/api/private/non_existing')
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.be.a('object')
+            res.body.should.have.property('error');
+            res.body.error.should.equal('No credentials sent!');
+            done();
+          });
+    });
+
+    it('invalid authorization header', (done) => {
+      chai.request(server)
+          .get('/api/private/non_existing')
+          .set('Authorization', 'Hello World')
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.be.a('object')
+            res.body.should.have.property('error');
+            res.body.error.should.equal('Invalid credentials sent!');
+            done();
+          });
+    });
+
+    // FIXME
+    // a valid JWT token but broken object
+    // a valid JWT token, valid object but non existing user
   });
 });
