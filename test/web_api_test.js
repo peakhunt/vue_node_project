@@ -52,6 +52,8 @@ describe('web api test', () => {
           .send(user)
           .end((err, res) => {
             res.should.have.status(200);
+            res.body.should.be.a('object')
+            res.body.should.have.property('token');
             done();
           })
     });
