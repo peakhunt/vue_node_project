@@ -1,1 +1,4 @@
 https://auth0.com/blog/developing-npm-packages/
+
+to unit test express with mocha chai chai-httpserver
+https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
