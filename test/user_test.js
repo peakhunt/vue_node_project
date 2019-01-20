@@ -1,11 +1,15 @@
 import * as assert from 'assert';
 const moment = require('moment');
+const crypto = require('crypto');
 const user = require('../src/user');
 const config = require('../src/config');
 
+const csum1 = crypto.createHash('sha256').update('password', 'utf8').digest('hex');
+const csum2 = crypto.createHash('sha256').update('hkim', 'utf8').digest('hex');
+
 const loginTestSamples = [
-  { id: 'admin', password: 'password', expectedResult: true, description: 'admin should be logged in' },
-  { id: 'hkim', password: 'hkim', expectedResult: true, description: 'hkim should be logged in' },
+  { id: 'admin', password: csum1, expectedResult: true, description: 'admin should be logged in' },
+  { id: 'hkim', password: csum2, expectedResult: true, description: 'hkim should be logged in' },
   { id: null, password: 'password', expectedResult: false, description: 'null id should be rejected' },
   { id: undefined, password: 'password', expectedResult: false, description: 'undefined should be rejected' },
   { id: 'admin', password: null, expectedResult: false, description: 'null password should be rejected' },
@@ -27,7 +31,7 @@ describe('user module', () => {
   });
 
   describe('authorize - token', () => {
-    assert.equal(user.login('admin', 'password').status, true);
+    assert.equal(user.login('admin', csum1).status, true);
 
     var linfo = user._private_for_test.get_login_info('admin');
 
@@ -39,7 +43,7 @@ describe('user module', () => {
 
   describe('logout', () => {
     it('normal logout', () => {
-      assert.equal(user.login('admin', 'password').status, true);
+      assert.equal(user.login('admin', csum1).status, true);
 
       var linfo = user._private_for_test.get_login_info('admin');
       assert.equal(linfo !== undefined, true);
@@ -62,7 +66,7 @@ describe('user module', () => {
     });
 
     it('login timeout', () => {
-      assert.equal(user.login('admin', 'password').status, true);
+      assert.equal(user.login('admin', csum1).status, true);
 
       var linfo = user._private_for_test.get_login_info('admin');
       assert.equal(linfo !== undefined, true);
@@ -82,7 +86,7 @@ describe('user module', () => {
   });
 
   it('decode test - normal', (done) => {
-    assert.equal(user.login('admin', 'password').status, true);
+    assert.equal(user.login('admin', csum1).status, true);
     var linfo = user._private_for_test.get_login_info('admin');
 
     user.decode(linfo.token, (err, decoded) => {

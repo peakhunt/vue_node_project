@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const config = require('../config');
@@ -30,14 +29,12 @@ function login_user(user) {
   return token;
 }
 
-function login(id, password) {
-  if (id === null || id === undefined || password === null || password === undefined) {
+function login(id, csum) {
+  if (id === null || id === undefined || csum === null || csum === undefined) {
     return { status: false, token: undefined };
   }
 
   const users = config.data.user_mgmt.users;
-
-  const csum = crypto.createHash('sha256').update(password, 'utf8').digest('hex');
 
   for (let i = 0; i < users.length; i += 1) {
     const user = users[i];

@@ -1,14 +1,29 @@
+const { check, validationResult } = require('express-validator/check');
+const user = require('../../../user');
+
 function login(req, res) {
-  const response = {
-    message: 'Hello, World!',
-    version: 0.1
-  };
+  const errors = validationResult(req);
 
-  res.json(response);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const result = user.login(req.body.username, req.body.csum);
+
+  if (result.status === false) {
+    // login failed
+    return res.status(401).json({ errors: ['login failed'] });
+  }
+
+  // login ok
+  return res.json({
+    token: result.token
+  });
 }
 
-function login_init(router) {
-  router.get('/login', login);
-}
-
-module.exports = login_init;
+module.exports = (router) => {
+  router.post('/login', [
+    check('username').isString(),
+    check('csum').isString()
+  ], login);
+};
