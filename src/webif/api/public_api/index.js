@@ -1,14 +1,9 @@
-function public_api_hello(req, res) {
-  const response = {
-    message: 'Hello, World!',
-    version: 0.1
-  };
-
-  res.json(response);
-}
+const hello = require('./hello');
+const login = require('./login');
 
 function public_api_init(router) {
-  router.get('/hello', public_api_hello);
+  hello(router);
+  login(router);
 }
 
 module.exports = public_api_init;

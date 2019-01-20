@@ -1,8 +1,4 @@
-function demo(req, res) {
-}
-
-function private_api_init(router) {
-  router.get('/demo', demo);
+function private_api_init() {
 }
 
 module.exports = private_api_init;
