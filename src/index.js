@@ -1,6 +1,6 @@
 const webif_init = require('./webif');
 
-const { app, server } = webif_init();
+const { app } = webif_init();
 
 //
 // for unit testing
