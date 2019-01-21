@@ -3,16 +3,20 @@ import axios from 'axios'
 
 const state = {
   loggedIn: false,
+  userID: '',
   loginToken: ''
 }
 
 const mutations = {
-  SET_LOGGED_IN (state, token) {
+  SET_LOGGED_IN (state, payload) {
     state.loggedIn = true
-    state.loginToken = token
+    state.loginToken = payload.token
+    state.userID = payload.userID
   },
   SET_LOGGED_OUT (state) {
     state.loggedIn = false
+    state.loginToken = ''
+    state.userID = ''
   }
 }
 
@@ -24,11 +28,14 @@ const actions = {
       csum: csum
     }
     axios.post('/api/public/login', userInfo).then((response) => {
-      context.commit('SET_LOGGED_IN', response.data.token)
+      context.commit('SET_LOGGED_IN', { token: response.data.token, userID: payload.id })
       payload.cb()
     }, (err) => {
       setTimeout(() => payload.cb(err), 1000)
     })
+  },
+  logout (context) {
+    // FIXME
   }
 }
 

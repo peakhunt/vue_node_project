@@ -5,10 +5,15 @@
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 
         <v-toolbar-title class="white--text">
-          <span class="font-weight-light">빳떼리</span>
+          <span class="font-weight-light">Your App</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
+        <!--
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn flat> {{ $route.name }}</v-btn>
+        </v-toolbar-items>
+        -->
       </v-toolbar>
 
       <v-navigation-drawer v-model="drawer" absolute temporary>

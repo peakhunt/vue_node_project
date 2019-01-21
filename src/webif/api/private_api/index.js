@@ -1,5 +1,6 @@
 const user = require('../../../user');
 const hello = require('./hello');
+const logout = require('./logout');
 
 function authorize(req, res, next) {
   if (!req.headers.authorization) {
@@ -15,6 +16,8 @@ function authorize(req, res, next) {
       return res.status(403).json({ error: 'Unauthorized!' });
     }
 
+    res.locals.uinfo = uinfo;
+
     return next();
   });
   return undefined;
@@ -24,6 +27,7 @@ function private_api_init(router) {
   router.use(authorize);
 
   hello(router);
+  logout(router);
 }
 
 module.exports = private_api_init;

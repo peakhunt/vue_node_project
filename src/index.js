@@ -1,8 +1,8 @@
 const webif_init = require('./webif');
 
-const { app } = webif_init();
+const { app, listener } = webif_init();
 
 //
 // for unit testing
 //
-module.exports = app;
+module.exports = { server: app, listener: listener }

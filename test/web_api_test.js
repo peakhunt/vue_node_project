@@ -1,7 +1,7 @@
 //
 // https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
 //
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'dev';
 
 import * as assert from 'assert';
 import { RSA_NO_PADDING } from 'constants';
@@ -10,7 +10,7 @@ const chaiHttp = require('chai-http');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const server = require('../src');
+const { server, listener } = require('../src');
 const config = require('../src/config');
 
 const should = chai.should();
@@ -18,6 +18,54 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 const csum1 = crypto.createHash('sha256').update('password', 'utf8').digest('hex');
+
+function test_login(user, cb) {
+  chai.request(server)
+      .post('/api/public/login')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(200);
+
+        const token = res.body.token;
+
+        cb(token)
+      });
+}
+
+function test_logout(token, cb) {
+  chai.request(server)
+      .post('/api/private/logout')
+      .set('Authorization', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        cb()
+      });
+}
+
+function test_private_hello_normal(token, cb) {
+  chai.request(server)
+      .get('/api/private/hello')
+      .set('Authorization', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object')
+        res.body.should.have.property('message');
+        res.body.should.have.property('version');
+        res.body.message.should.equal('Hello, World from Private!');
+        res.body.version.should.equal(0.1);
+        cb(token);
+      });
+}
+
+function test_private_hello_after_logout(token, cb) {
+  chai.request(server)
+      .get('/api/private/hello')
+      .set('Authorization', token)
+      .end((err, res) => {
+        res.should.have.status(403);
+        cb(token);
+      });
+}
 
 // parent block
 describe('public api test', () => {
@@ -240,5 +288,24 @@ describe('private api test', () => {
                 });
           })
     });
+
+    it('logout test', (done) => {
+      const user = {
+        username: 'admin',
+        csum: config.data.user_mgmt.users[0].password
+      };
+
+      test_login(user, (token) => {
+        test_private_hello_normal(token, (token) => {
+          test_logout(token, () => {
+            test_private_hello_after_logout(token, (token) => {
+              done();
+            });
+          });
+        });
+      });
+
+    });
   });
 });
+

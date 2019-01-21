@@ -18,8 +18,12 @@ function webintf_init() {
 
   logger.error('NODE_ENV = ' + process.env.NODE_ENV);
 
+  /* istanbul ignore if  */
+  /* istanbul ignore else */
   if(process.env.NODE_ENV === 'dev') {
+    /* istanbul ignore next: not easy to test this part. no need to either */
     logger.warn(`running in dev mode using port ${config.data.web.devPort}`)
+    /* istanbul ignore next: not easy to test this part. no need to either */
     port = config.data.web.devPort;
   }
 
@@ -32,9 +36,9 @@ function webintf_init() {
 
   api(app);
 
-  const server = app.listen(port, () => logger.info(`Example app listening on port ${port}!`));
+  const listener = app.listen(port, () => logger.info(`Example app listening on port ${port}!`));
 
-  return { app, server };
+  return { app, listener };
 }
 
 module.exports = webintf_init;
