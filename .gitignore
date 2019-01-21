@@ -5,3 +5,4 @@ node_modules/
 coverage/
 .nyc_output/
 my_log.log
+vue-admin-template-master/
