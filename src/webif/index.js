@@ -11,7 +11,15 @@ function webintf_init() {
   logger.debug(config);
 
   const app = express();
-  const port = config.data.web.port;
+
+  var port;
+
+  port = config.data.web.port;
+
+  if(process.env.NODE_ENV === 'dev') {
+    port = config.data.web.devPort;
+  }
+
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));

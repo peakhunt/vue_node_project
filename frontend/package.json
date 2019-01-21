@@ -6,6 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "dev_server": "cd ../ && npm run dev",
+    "dev": "concurrently \"npm run dev_server\" \"npm run serve\" ",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
@@ -23,6 +25,7 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
+    "concurrently": "^4.1.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",

@@ -3,7 +3,8 @@
     "level": "warning"
   },
   "web": {
-    "port": 8080
+    "port": 8080,
+    "devPort": 3000
   },
   "user_mgmt": {
     "super_secret": "180037684e54a59a25a076f9ad02ff1e8722660f6642e52c61d83978a5bb89a2",

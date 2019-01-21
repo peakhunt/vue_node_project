@@ -1,37 +1,49 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+  <v-app dark>
+    <v-toolbar>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+
+      <v-toolbar-title class="white--text">
+        <span class="font-weight-light">빳떼리</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+
     </v-toolbar>
 
+    <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
+        <v-list-tile
+          v-for="item in navItems"
+          :key="item.title"
+          :to="item.to">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-content>
-      <HelloWorld/>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data () {
     return {
-      //
+      drawer: false,
+      navItems: [
+        { icon: 'apps', title: 'Main', to: '/' },
+        { icon: 'apps', title: 'About', to: '/about' }
+      ]
     }
   }
 }
