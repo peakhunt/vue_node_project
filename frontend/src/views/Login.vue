@@ -1,6 +1,6 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout align-center justify-center>
+    <v-layout align-center justify-center v-if="!loginProgress">
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
@@ -20,14 +20,31 @@
                             label="Password"
                             :rules="[rules.required]" />
             </v-form>
+            <span v-if="loginFailed" style="color: red; display: block" class="text-xs-center">
+              Login failed. please try again!
+            </span>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn :disabled="!valid" color="primary" @click="doLogin">Login</v-btn>
           </v-card-actions>
         </v-card>
+
       </v-flex>
     </v-layout>
+
+    <v-container grid-list-md text-xs-center v-if="loginProgress">
+      <v-flex xs12 align-center justify-center>
+        <v-progress-circular
+         :size="120"
+         indeterminate
+         color="green"/>
+      </v-flex>
+      <v-flex xs12 align-center justify-center>
+        <span align-center>Logging In...</span>
+      </v-flex>
+    </v-container>
+
   </v-container>
 </template>
 
@@ -37,12 +54,20 @@ export default {
   name: 'Login',
   methods: {
     doLogin () {
+      const self = this
+
+      self.loginProgress = true
+      self.loginFailed = false
+
       this.$store.dispatch('login', {
         id: this.id,
         password: this.password,
         cb: (err) => {
+          self.loginProgress = false
+
           if (err) {
             console.log('login failed')
+            self.loginFailed = true
             return
           }
           console.log('login success')
@@ -55,6 +80,8 @@ export default {
       id: '',
       password: '',
       valid: true,
+      loginProgress: false,
+      loginFailed: false,
       rules: {
         required: value => !!value || 'Required.'
       }
@@ -62,3 +89,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+  .v-progress-circular
+    margin: 1rem
+</style>

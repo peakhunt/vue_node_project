@@ -27,7 +27,7 @@ const actions = {
       context.commit('SET_LOGGED_IN', response.data.token)
       payload.cb()
     }, (err) => {
-      payload.cb(err)
+      setTimeout(() => payload.cb(err), 1000)
     })
   }
 }
