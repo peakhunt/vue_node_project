@@ -31,6 +31,17 @@
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile @click="doLogout">
+            <v-list-tile-action>
+              <v-icon>apps</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>Log Out</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
         </v-list>
       </v-navigation-drawer>
 
@@ -66,6 +77,18 @@ export default {
         { icon: 'apps', title: 'Main', to: '/' },
         { icon: 'apps', title: 'About', to: '/about' }
       ]
+    }
+  },
+  methods: {
+    doLogout () {
+      console.log('logout called')
+      this.$store.dispatch('logout', (err) => {
+        if (err) {
+          console.log('logout failed' + err)
+          return
+        }
+        console.log('logout success')
+      })
     }
   }
 }

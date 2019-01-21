@@ -34,8 +34,19 @@ const actions = {
       setTimeout(() => payload.cb(err), 1000)
     })
   },
-  logout (context) {
-    // FIXME
+  logout (context, cb) {
+    const token = context.state.loginToken
+
+    axios.post('/api/private/logout', {}, {
+      headers: {
+        Authorization: token
+      }
+    }).then((response) => {
+      cb()
+      context.commit('SET_LOGGED_OUT')
+    }, (err) => {
+      cb(err)
+    })
   }
 }
 
