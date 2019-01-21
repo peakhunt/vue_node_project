@@ -1,4 +1,5 @@
 const user = require('../../../user');
+const hello = require('./hello');
 
 function authorize(req, res, next) {
   if (!req.headers.authorization) {
@@ -21,6 +22,8 @@ function authorize(req, res, next) {
 
 function private_api_init(router) {
   router.use(authorize);
+
+  hello(router);
 }
 
 module.exports = private_api_init;

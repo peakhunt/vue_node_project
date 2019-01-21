@@ -8,7 +8,10 @@ import { RSA_NO_PADDING } from 'constants';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const server = require('../src');
+const config = require('../src/config');
 
 const should = chai.should();
 
@@ -126,7 +129,7 @@ describe('private api test', () => {
     done();
   });
 
-  describe('GET /api/private/non_existing', () => {
+  describe('GET /api/private', () => {
     it('no authorization header', (done) => {
       chai.request(server)
           .get('/api/private/non_existing')
@@ -152,8 +155,90 @@ describe('private api test', () => {
           });
     });
 
-    // FIXME
     // a valid JWT token but broken object
-    // a valid JWT token, valid object but non existing user
+    it('valid JWT token but broken object', (done) => {
+      const user = {
+        id_invalid: 'admin',
+        password_invalid: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+        admin_invalid: false
+      };
+
+      const uinfo = {
+        user,
+        access_time: moment()
+      };
+      
+      const secret = config.data.user_mgmt.super_secret;
+
+      const token = jwt.sign(uinfo, secret);
+      chai.request(server)
+          .get('/api/private/hello')
+          .set('Authorization', token)
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.be.a('object')
+            res.body.should.have.property('error');
+            res.body.error.should.equal('Unauthorized!');
+            done();
+          });
+    });
+
+    it('valid JWT token, valid object but not existing user', (done) => {
+      const user = {
+        id: 'admin1',
+        password: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+        admin: true
+      };
+
+      const uinfo = {
+        user,
+        access_time: moment()
+      };
+      
+      const secret = config.data.user_mgmt.super_secret;
+
+      const token = jwt.sign(uinfo, secret);
+      chai.request(server)
+          .get('/api/private/hello')
+          .set('Authorization', token)
+          .end((err, res) => {
+            res.should.have.status(403);
+            res.body.should.be.a('object')
+            res.body.should.have.property('error');
+            res.body.error.should.equal('Unauthorized!');
+            done();
+          });
+    });
+
+    it('authorization success', (done) => {
+      const user = {
+        username: 'admin',
+        csum: config.data.user_mgmt.users[0].password
+      };
+
+      chai.request(server)
+          .post('/api/public/login')
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object')
+            res.body.should.have.property('token');
+
+            const token = res.body.token;
+
+            chai.request(server)
+                .get('/api/private/hello')
+                .set('Authorization', token)
+                .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.be.a('object')
+                  res.body.should.have.property('message');
+                  res.body.should.have.property('version');
+                  res.body.message.should.equal('Hello, World from Private!');
+                  res.body.version.should.equal(0.1);
+                  done();
+                });
+          })
+    });
   });
 });
