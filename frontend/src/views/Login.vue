@@ -23,7 +23,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn :disabled="!valid" color="primary">Login</v-btn>
+            <v-btn :disabled="!valid" color="primary" @click="doLogin">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -32,10 +32,22 @@
 </template>
 
 <script>
+
 export default {
   name: 'Login',
   methods: {
     doLogin () {
+      this.$store.dispatch('login', {
+        id: this.id,
+        password: this.password,
+        cb: (err) => {
+          if (err) {
+            console.log('login failed')
+            return
+          }
+          console.log('login success')
+        }
+      })
     }
   },
   data () {

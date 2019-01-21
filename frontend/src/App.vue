@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <div v-if="loggedIn">
+    <div v-if="isLoggedIn">
       <v-toolbar>
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 
@@ -34,17 +34,23 @@
       </v-content>
     </div>
 
-    <v-content v-if="!loggedIn">
+    <v-content v-if="!isLoggedIn">
       <login/>
     </v-content>
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Login from './views/Login.vue'
 
 export default {
   name: 'App',
+  computed: {
+    ...mapGetters([
+      'isLoggedIn'
+    ])
+  },
   components: {
     Login
   },
@@ -54,8 +60,7 @@ export default {
       navItems: [
         { icon: 'apps', title: 'Main', to: '/' },
         { icon: 'apps', title: 'About', to: '/about' }
-      ],
-      loggedIn: false
+      ]
     }
   }
 }

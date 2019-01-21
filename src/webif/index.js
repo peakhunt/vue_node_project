@@ -16,7 +16,10 @@ function webintf_init() {
 
   port = config.data.web.port;
 
+  logger.error('NODE_ENV = ' + process.env.NODE_ENV);
+
   if(process.env.NODE_ENV === 'dev') {
+    logger.warn(`running in dev mode using port ${config.data.web.devPort}`)
     port = config.data.web.devPort;
   }
 
