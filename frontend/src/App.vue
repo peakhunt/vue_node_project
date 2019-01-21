@@ -1,49 +1,61 @@
 <template>
   <v-app dark>
-    <v-toolbar>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <div v-if="loggedIn">
+      <v-toolbar>
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 
-      <v-toolbar-title class="white--text">
-        <span class="font-weight-light">빳떼리</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
+        <v-toolbar-title class="white--text">
+          <span class="font-weight-light">빳떼리</span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
 
-    </v-toolbar>
+      </v-toolbar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-        <v-list-tile
-          v-for="item in navItems"
-          :key="item.title"
-          :to="item.to">
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+      <v-navigation-drawer v-model="drawer" absolute temporary>
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+          <v-list-tile
+            v-for="item in navItems"
+            :key="item.title"
+            :to="item.to">
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
 
-    <v-content>
-      <router-view/>
+      <v-content>
+        <router-view/>
+      </v-content>
+    </div>
+
+    <v-content v-if="!loggedIn">
+      <login/>
     </v-content>
   </v-app>
 </template>
 
 <script>
+import Login from './views/Login.vue'
+
 export default {
   name: 'App',
+  components: {
+    Login
+  },
   data () {
     return {
       drawer: false,
       navItems: [
         { icon: 'apps', title: 'Main', to: '/' },
         { icon: 'apps', title: 'About', to: '/about' }
-      ]
+      ],
+      loggedIn: false
     }
   }
 }
