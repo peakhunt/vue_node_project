@@ -14,6 +14,8 @@ function webintf_init() {
 
   const app = express();
 
+  app.use(express.static('public'));
+
   port = config.data.web.port;
 
   logger.error(`NODE_ENV = ${process.env.NODE_ENV}`);
