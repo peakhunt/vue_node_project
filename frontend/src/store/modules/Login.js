@@ -12,11 +12,22 @@ const mutations = {
     state.loggedIn = true
     state.loginToken = payload.token
     state.userID = payload.userID
+
+    sessionStorage.setItem('credential', JSON.stringify(payload))
   },
   SET_LOGGED_OUT (state) {
     state.loggedIn = false
     state.loginToken = ''
     state.userID = ''
+    sessionStorage.removeItem('credential')
+  },
+  initializeLogin (state) {
+    if (sessionStorage.getItem('credential')) {
+      const cred = JSON.parse(sessionStorage.getItem('credential'))
+      state.loggedIn = true
+      state.loginToken = cred.token
+      state.userID = cred.userID
+    }
   }
 }
 
