@@ -1,4 +1,3 @@
-const { check, validationResult } = require('express-validator/check');
 const user = require('../../../user');
 
 function logout(req, res) {
@@ -9,4 +8,4 @@ function logout(req, res) {
 module.exports = (router) => {
   router.post('/logout', [
   ], logout);
-}
+};

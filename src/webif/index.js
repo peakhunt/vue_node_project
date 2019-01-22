@@ -7,22 +7,22 @@ const config = require('../config');
 const api = require('./api');
 
 function webintf_init() {
+  let port;
+
   logger.debug('webintf_init');
   logger.debug(config);
 
   const app = express();
 
-  var port;
-
   port = config.data.web.port;
 
-  logger.error('NODE_ENV = ' + process.env.NODE_ENV);
+  logger.error(`NODE_ENV = ${process.env.NODE_ENV}`);
 
   /* istanbul ignore if  */
   /* istanbul ignore else */
-  if(process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'dev') {
     /* istanbul ignore next: not easy to test this part. no need to either */
-    logger.warn(`running in dev mode using port ${config.data.web.devPort}`)
+    logger.warn(`running in dev mode using port ${config.data.web.devPort}`);
     /* istanbul ignore next: not easy to test this part. no need to either */
     port = config.data.web.devPort;
   }

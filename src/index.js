@@ -5,4 +5,4 @@ const { app, listener } = webif_init();
 //
 // for unit testing
 //
-module.exports = { server: app, listener: listener }
+module.exports = { server: app, listener };
