@@ -50,6 +50,12 @@
       </v-footer>
     </div>
 
+    <v-snackbar v-model="noti.show"
+                :color="noti.color"
+                :timeout="noti.timeout"> {{ noti.msg }}
+      <v-btn flat @click="noti.show = false">Close</v-btn>
+    </v-snackbar>
+
     <v-dialog v-model="showLoggingOutDialog" persistent max-width="400px">
       <v-card color="primary">
         <v-card-text> Logging Out...
@@ -86,6 +92,12 @@ export default {
     return {
       drawer: false,
       showLoggingOutDialog: false,
+      noti: {
+        show: false,
+        color: '',
+        msg: '',
+        timeout: 3000
+      },
       navItems: [
         { icon: 'apps', title: 'Main', to: '/' },
         { icon: 'apps', title: 'About', to: '/about' }
@@ -103,11 +115,22 @@ export default {
           self.showLoggingOutDialog = false
           if (err) {
             console.log('logout failed' + err)
+            self.showNotification('logout failed', 'error')
             return
           }
           console.log('logout success')
         })
       }, 1000)
+    },
+    showNotification (msg, color) {
+      const self = this
+
+      self.noti.show = false
+      setTimeout(() => {
+        self.noti.msg = msg
+        self.noti.color = color
+        self.noti.show = true
+      }, 250)
     }
   }
 }
