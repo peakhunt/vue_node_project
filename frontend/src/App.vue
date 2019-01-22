@@ -50,6 +50,18 @@
       </v-content>
     </div>
 
+    <v-dialog v-model="showLoggingOutDialog" persistent max-width="400px">
+      <v-card color="primary">
+        <v-card-text> Logging Out...
+          <v-progress-linear
+            indeterminate
+            color="green"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <v-content v-if="!isLoggedIn">
       <login/>
     </v-content>
@@ -73,6 +85,7 @@ export default {
   data () {
     return {
       drawer: false,
+      showLoggingOutDialog: false,
       navItems: [
         { icon: 'apps', title: 'Main', to: '/' },
         { icon: 'apps', title: 'About', to: '/about' }
@@ -81,14 +94,20 @@ export default {
   },
   methods: {
     doLogout () {
+      const self = this
+
       console.log('logout called')
-      this.$store.dispatch('logout', (err) => {
-        if (err) {
-          console.log('logout failed' + err)
-          return
-        }
-        console.log('logout success')
-      })
+      self.showLoggingOutDialog = true
+      setTimeout(() => {
+        self.$store.dispatch('logout', (err) => {
+          self.showLoggingOutDialog = false
+          if (err) {
+            console.log('logout failed' + err)
+            return
+          }
+          console.log('logout success')
+        })
+      }, 1000)
     }
   }
 }

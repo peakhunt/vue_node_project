@@ -33,17 +33,17 @@
       </v-flex>
     </v-layout>
 
-    <v-container grid-list-md text-xs-center v-if="loginProgress">
-      <v-flex xs12 align-center justify-center>
-        <v-progress-circular
-         :size="120"
-         indeterminate
-         color="green"/>
-      </v-flex>
-      <v-flex xs12 align-center justify-center>
-        <span align-center>Logging In...</span>
-      </v-flex>
-    </v-container>
+    <v-dialog v-model="loginProgress" persistent max-width="400px">
+      <v-card color="primary">
+        <v-card-text> Logging In...
+          <v-progress-linear
+            indeterminate
+            color="green"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
   </v-container>
 </template>
@@ -59,20 +59,22 @@ export default {
       self.loginProgress = true
       self.loginFailed = false
 
-      this.$store.dispatch('login', {
-        id: this.id,
-        password: this.password,
-        cb: (err) => {
-          self.loginProgress = false
+      setTimeout(() => {
+        self.$store.dispatch('login', {
+          id: this.id,
+          password: this.password,
+          cb: (err) => {
+            self.loginProgress = false
 
-          if (err) {
-            console.log('login failed')
-            self.loginFailed = true
-            return
+            if (err) {
+              console.log('login failed')
+              self.loginFailed = true
+              return
+            }
+            console.log('login success')
           }
-          console.log('login success')
-        }
-      })
+        })
+      }, 1000)
     }
   },
   data () {

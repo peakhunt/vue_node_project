@@ -31,7 +31,7 @@ const actions = {
       context.commit('SET_LOGGED_IN', { token: response.data.token, userID: payload.id })
       payload.cb()
     }, (err) => {
-      setTimeout(() => payload.cb(err), 1000)
+      payload.cb(err)
     })
   },
   logout (context, cb) {
