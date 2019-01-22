@@ -4,7 +4,8 @@ import axios from 'axios'
 const state = {
   loggedIn: false,
   userID: '',
-  loginToken: ''
+  loginToken: '',
+  http403Error: false
 }
 
 const mutations = {
@@ -12,6 +13,7 @@ const mutations = {
     state.loggedIn = true
     state.loginToken = payload.token
     state.userID = payload.userID
+    state.http403Error = false
 
     sessionStorage.setItem('credential', JSON.stringify(payload))
   },
@@ -19,7 +21,14 @@ const mutations = {
     state.loggedIn = false
     state.loginToken = ''
     state.userID = ''
+    state.http403Error = false
     sessionStorage.removeItem('credential')
+  },
+  SET_403_ERROR (state) {
+    state.http403Error = true
+  },
+  CLEAR_403_ERROR (state) {
+    state.http403Error = false
   },
   initializeLogin (state) {
     if (sessionStorage.getItem('credential')) {
@@ -56,8 +65,16 @@ const actions = {
       cb()
       context.commit('SET_LOGGED_OUT')
     }, (err) => {
+      if (err.response.status === 403) {
+        cb()
+        context.commit('SET_LOGGED_OUT')
+        return
+      }
       cb(err)
     })
+  },
+  forceLogout (context) {
+    context.commit('SET_LOGGED_OUT')
   }
 }
 
@@ -67,6 +84,9 @@ const getters = {
   },
   loginToken (state) {
     return state.loginToken
+  },
+  http403Error (state) {
+    return state.http403Error
   }
 }
 

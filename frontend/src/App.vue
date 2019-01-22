@@ -1,54 +1,58 @@
 <template>
   <v-app dark>
-    <div v-if="isLoggedIn">
-      <v-toolbar>
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar v-if="isLoggedIn">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title class="white--text">
+        <span class="font-weight-light">Your App</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
 
-        <v-toolbar-title class="white--text">
-          <span class="font-weight-light">Your App</span>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
+    <v-navigation-drawer v-if="isLoggedIn" v-model="drawer" absolute temporary>
+      <v-list class="pt-0" dense>
+        <v-divider></v-divider>
+        <v-list-tile
+         v-for="item in navItems"
+         :key="item.title"
+         :to="item.to">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
 
-      </v-toolbar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
 
-      <v-navigation-drawer v-model="drawer" absolute temporary>
-        <v-list class="pt-0" dense>
-          <v-divider></v-divider>
-          <v-list-tile
-            v-for="item in navItems"
-            :key="item.title"
-            :to="item.to">
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
+        <v-list-tile @click="doLogout">
+          <v-list-tile-action>
+            <v-icon>apps</v-icon>
+          </v-list-tile-action>
 
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <v-list-tile-content>
+            <v-list-tile-title>Log Out</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
 
-          <v-list-tile @click="doLogout">
-            <v-list-tile-action>
-              <v-icon>apps</v-icon>
-            </v-list-tile-action>
+    <v-content>
+      <router-view v-if="isLoggedIn"/>
+      <login v-if="!isLoggedIn"/>
+    </v-content>
 
-            <v-list-tile-content>
-              <v-list-tile-title>Log Out</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-        </v-list>
-      </v-navigation-drawer>
-
-      <v-content>
-        <router-view/>
-      </v-content>
-
-      <v-footer absolute class="pa-3">
-        <v-spacer></v-spacer>
-        <div>&copy; {{ new Date().getFullYear() }}</div>
-      </v-footer>
-    </div>
+    <v-dialog v-model="youAreLoggedOut" persistent max-width="400px">
+      <v-card color="error">
+        <v-card-title class="headline">You are logged out!!!</v-card-title>
+        <v-card-text>
+          You are logged out from the system. Please login again
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="forceLogout">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-snackbar v-model="noti.show"
                 :color="noti.color"
@@ -68,9 +72,10 @@
       </v-card>
     </v-dialog>
 
-    <v-content v-if="!isLoggedIn">
-      <login/>
-    </v-content>
+    <v-footer v-if="isLoggedIn" absolute class="pa-3">
+      <v-spacer></v-spacer>
+      <div>&copy; {{ new Date().getFullYear() }}</div>
+    </v-footer>
   </v-app>
 </template>
 
@@ -82,7 +87,8 @@ export default {
   name: 'App',
   computed: {
     ...mapGetters([
-      'isLoggedIn'
+      'isLoggedIn',
+      'http403Error'
     ])
   },
   components: {
@@ -92,6 +98,7 @@ export default {
     return {
       drawer: false,
       showLoggingOutDialog: false,
+      youAreLoggedOut: false,
       noti: {
         show: false,
         color: '',
@@ -122,6 +129,11 @@ export default {
         })
       }, 1000)
     },
+    forceLogout () {
+      console.log('forcing Logout')
+      this.youAreLoggedOut = false
+      this.$store.dispatch('forceLogout')
+    },
     showNotification (msg, color) {
       const self = this
 
@@ -131,6 +143,42 @@ export default {
         self.noti.color = color
         self.noti.show = true
       }, 250)
+    },
+    performLoginStartup () {
+      console.log('###### performLoginStartup')
+      // XXX FIXME
+    },
+    performLogoutCleanup () {
+      console.log('###### performLogoutCleanup')
+      // XXX FIXME
+    }
+  },
+  watch: {
+    isLoggedIn (newVal, oldVal) {
+      if (oldVal === false && newVal === true) {
+        // new just logged in
+        // XXX do anything necessary that should be done
+        // after user login
+        this.performLoginStartup()
+      } else if (oldVal === true && newVal === false) {
+        // new just logged out
+        // XXX do anything necessary that should be done
+        // after user logged out
+        this.performLogoutCleanup()
+      }
+    },
+    http403Error (newVal, oldVal) {
+      if (oldVal === false && newVal === true) {
+        // this means we are logged out
+        console.log('http403Error occurred')
+        this.youAreLoggedOut = true
+      }
+    }
+  },
+  mounted () {
+    console.log('#### mounted')
+    if (this.isLoggedIn === true) {
+      this.performLoginStartup()
     }
   }
 }
