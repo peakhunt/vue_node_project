@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height>
+  <v-parallax src="vbanner.jpg" style="height:100%">
     <v-layout align-center justify-center v-if="!loginProgress">
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
@@ -11,7 +11,7 @@
             <v-form v-model="valid">
               <v-text-field v-model="id"
                             prepend-icon="person"
-                            label="Login"
+                            label="User ID"
                             type="text"
                             :rules="[rules.required]" />
               <v-text-field v-model="password"
@@ -45,7 +45,7 @@
       </v-card>
     </v-dialog>
 
-  </v-container>
+  </v-parallax>
 </template>
 
 <script>
