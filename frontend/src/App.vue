@@ -48,6 +48,11 @@
       <v-content>
         <router-view/>
       </v-content>
+
+      <v-footer absolute class="pa-3">
+        <v-spacer></v-spacer>
+        <div>&copy; {{ new Date().getFullYear() }}</div>
+      </v-footer>
     </div>
 
     <v-dialog v-model="showLoggingOutDialog" persistent max-width="400px">
