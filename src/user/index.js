@@ -11,6 +11,15 @@ function get_login_info(id) {
   return logged_in_users[id];
 }
 
+function admin_cap_check(id) {
+  const linfo = get_login_info(id);
+
+  if (linfo === undefined || !linfo.uinfo.user.admin) {
+    return false;
+  }
+  return true;
+}
+
 function login_user(user) {
   logger.info(`${user.id} logged in`);
 
@@ -112,9 +121,7 @@ function decode(token, cb) {
 
 function change_password(from_id, id, old_sum, new_sum, cb) {
   if (from_id !== id) {
-    const linfo = get_login_info(from_id);
-
-    if(linfo === undefined || !linfo.uinfo.user.admin) {
+    if (admin_cap_check(from_id) === false) {
       process.nextTick(() => {
         cb('need admin capability to change other accounts\' password');
       });

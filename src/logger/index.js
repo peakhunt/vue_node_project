@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'dev'
+process.env.NODE_ENV = 'dev';
 
 const { createLogger, format, transports } = require('winston');
 const config = require('../config');
