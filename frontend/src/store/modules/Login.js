@@ -5,7 +5,8 @@ const state = {
   loggedIn: false,
   userID: '',
   loginToken: '',
-  http403Error: false
+  http403Error: false,
+  admin: false
 }
 
 const mutations = {
@@ -13,6 +14,7 @@ const mutations = {
     state.loggedIn = true
     state.loginToken = payload.token
     state.userID = payload.userID
+    state.admin = payload.admin
     state.http403Error = false
 
     sessionStorage.setItem('credential', JSON.stringify(payload))
@@ -22,6 +24,7 @@ const mutations = {
     state.loginToken = ''
     state.userID = ''
     state.http403Error = false
+    state.admin = false
     sessionStorage.removeItem('credential')
   },
   SET_403_ERROR (state) {
@@ -36,6 +39,7 @@ const mutations = {
       state.loggedIn = true
       state.loginToken = cred.token
       state.userID = cred.userID
+      state.admin = cred.admin
     }
   }
 }
@@ -48,7 +52,11 @@ const actions = {
       csum: csum
     }
     axios.post('/api/public/login', userInfo).then((response) => {
-      context.commit('SET_LOGGED_IN', { token: response.data.token, userID: payload.id })
+      context.commit('SET_LOGGED_IN', {
+        token: response.data.token,
+        admin: response.data.admin,
+        userID: payload.id
+      })
       payload.cb()
     }, (err) => {
       payload.cb(err)
@@ -104,6 +112,9 @@ const getters = {
   },
   http403Error (state) {
     return state.http403Error
+  },
+  isAdmin (state) {
+    return state.admin
   }
 }
 

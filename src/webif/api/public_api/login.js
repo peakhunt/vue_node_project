@@ -17,7 +17,8 @@ function login(req, res) {
 
   // login ok
   return res.json({
-    token: result.token
+    token: result.token,
+    admin: result.admin
   });
 }
 

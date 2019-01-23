@@ -35,7 +35,7 @@ function login_user(user) {
 
 function login(id, csum) {
   if (id === null || id === undefined || csum === null || csum === undefined) {
-    return { status: false, token: undefined };
+    return { status: false, token: undefined, admin: false };
   }
 
   const users = config.data.user_mgmt.users;
@@ -46,12 +46,13 @@ function login(id, csum) {
     if (user.id === id && user.password === csum) {
       return {
         status: true,
-        token: login_user(user)
+        token: login_user(user),
+        admin: user.admin
       };
     }
   }
   logger.info(`${id} failed to login`);
-  return { status: false, token: undefined };
+  return { status: false, token: undefined, admin: false };
 }
 
 function logout(id) {
