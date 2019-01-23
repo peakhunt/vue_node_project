@@ -129,4 +129,20 @@ describe('user module', () => {
       }
     });
   });
+
+  it('update_password test', (done) => {
+    const newSum = crypto.createHash('sha256').update('new_password', 'utf8').digest('hex');
+    const oldSum = config.data.user_mgmt.users[0].password;
+
+    user.change_password('admin', oldSum, newSum, (err) => {
+      assert.equal(err, undefined);
+      assert.equal(config.data.user_mgmt.users[0].password, newSum);
+
+      user.change_password('admin', newSum, oldSum, (err) => {
+        assert.equal(err, undefined);
+        assert.equal(config.data.user_mgmt.users[0].password, oldSum);
+        done();
+      });
+    });
+  });
 });

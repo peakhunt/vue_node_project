@@ -15,7 +15,10 @@ function login_user(user) {
 
   const secret = config.data.user_mgmt.super_secret;
   const uinfo = {
-    user,
+    user: {
+      id: user.id,
+      admin: user.admin
+    },
     access_time: moment()
   };
 
@@ -105,11 +108,16 @@ function decode(token, cb) {
   });
 }
 
+function change_password(id, old_sum, new_sum, cb) {
+  config.update_password(id, old_sum, new_sum, cb);
+}
+
 module.exports = {
   login,
   logout,
   authorize,
   decode,
+  change_password,
   _private_for_test: {
     get_login_info
   }

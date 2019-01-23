@@ -1,6 +1,7 @@
 const user = require('../../../user');
 const hello = require('./hello');
 const logout = require('./logout');
+const change_password = require('./change_password');
 
 function authorize(req, res, next) {
   if (!req.headers.authorization) {
@@ -28,6 +29,7 @@ function private_api_init(router) {
 
   hello(router);
   logout(router);
+  change_password(router);
 }
 
 module.exports = private_api_init;

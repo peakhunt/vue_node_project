@@ -67,6 +67,91 @@ function test_private_hello_after_logout(token, cb) {
       });
 }
 
+////////////////////////////
+// password change test suites
+////////////////////////////
+function test_password_change_task1_login(done, user, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/public/login')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(200);
+
+        const token = res.body.token;
+
+        test_password_change_task2_change_invalid1(done, token, oldSum, newSum);
+      });
+}
+
+
+function test_password_change_task2_change_invalid1(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token, oldSum })
+      .end((err, res) => {
+        res.should.have.status(422);
+        test_password_change_task3_change_invalid2(done, token, oldSum, newSum);
+      });
+}
+
+function test_password_change_task3_change_invalid2(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token, newSum })
+      .end((err, res) => {
+        res.should.have.status(422);
+        test_password_change_task4_change_invalid3(done, token, oldSum, newSum);
+      });
+}
+
+function test_password_change_task4_change_invalid3(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token })
+      .end((err, res) => {
+        res.should.have.status(422);
+        test_password_change_task5_change_error(done, token, oldSum, newSum);
+      });
+}
+
+function test_password_change_task5_change_error(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token, oldSum: 'invalid', newSum })
+      .end((err, res) => {
+        res.should.have.status(406);
+        test_password_change_task6_change_success(done, token, oldSum, newSum);
+      });
+}
+
+function test_password_change_task6_change_success(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token, oldSum, newSum })
+      .end((err, res) => {
+        res.should.have.status(200);
+        test_password_change_task7_change_back(done, token, oldSum, newSum);
+      });
+}
+
+function test_password_change_task7_change_back(done, token, oldSum, newSum) {
+  chai.request(server)
+      .post('/api/private/change_password')
+      .set('Authorization', token)
+      .send({ token, oldSum: newSum, newSum: oldSum })
+      .end((err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+}
+
+///////////////////////////
+
 // parent block
 describe('public api test', () => {
   beforeEach((done) => {
@@ -305,6 +390,18 @@ describe('private api test', () => {
         });
       });
 
+    });
+
+    it('change password test', (done) => {
+      const user = {
+        username: 'admin',
+        csum: config.data.user_mgmt.users[0].password
+      };
+
+      const oldSum = config.data.user_mgmt.users[0].password;
+      const newSum = crypto.createHash('sha256').update('new_password', 'utf8').digest('hex');
+
+      test_password_change_task1_login(done, user, oldSum, newSum);
     });
   });
 });
