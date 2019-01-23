@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const config = require('../config');
+const config_update = require('../config_update');
 const logger = require('../logger');
 
 const logged_in_users = {
@@ -109,7 +110,7 @@ function decode(token, cb) {
 }
 
 function change_password(id, old_sum, new_sum, cb) {
-  config.update_password(id, old_sum, new_sum, cb);
+  config_update.update_password(id, old_sum, new_sum, cb);
 }
 
 module.exports = {

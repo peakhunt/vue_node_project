@@ -7,7 +7,7 @@ const {
   printf
 } = format;
 
-const { data: { log: { level } } } = config;
+const level = config.data.log.level;
 
 const myFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
 
