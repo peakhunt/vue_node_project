@@ -37,7 +37,7 @@
     </v-navigation-drawer>
 
     <v-content>
-      <router-view v-if="isLoggedIn"/>
+      <router-view v-if="isLoggedIn" v-on:add-notify="addNotify"/>
       <login v-if="!isLoggedIn"/>
     </v-content>
 
@@ -145,12 +145,16 @@ export default {
         self.noti.show = true
       }, 250)
     },
+    addNotify (noti) {
+      this.showNotification(noti.msg, noti.color)
+    },
     performLoginStartup () {
       console.log('###### performLoginStartup')
       // XXX FIXME
     },
     performLogoutCleanup () {
       console.log('###### performLogoutCleanup')
+      this.$router.push('/')
       // XXX FIXME
     }
   },

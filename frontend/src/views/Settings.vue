@@ -11,7 +11,7 @@
 
           <v-card-text>
             <v-form v-model="valid">
-              <v-text-field v-model="orgPassword"
+              <v-text-field v-model="oldPassword"
                             prepend-icon="lock"
                             type="password"
                             label="Original Password"
@@ -46,7 +46,7 @@ export default {
   name: 'Settings',
   data () {
     return {
-      orgPassword: '',
+      oldPassword: '',
       newPassword1: '',
       newPassword2: '',
       valid: true,
@@ -59,6 +59,17 @@ export default {
   methods: {
     changePassword () {
       console.log('trying to update password')
+      this.$store.dispatch('changePassword', {
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword1,
+        cb: (err) => {
+          if (err) {
+            const msg = 'Password update failed: ' + err
+            return this.$emit('add-notify', { msg, color: 'error' })
+          }
+          return this.$emit('add-notify', { msg: 'Password Updated', color: 'success' })
+        }
+      })
     },
     passwordMatchError () {
       return (this.newPassword1 === this.newPassword2) ? '' : 'Passowrd doesn\'t match'

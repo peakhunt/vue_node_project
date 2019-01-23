@@ -75,6 +75,23 @@ const actions = {
   },
   forceLogout (context) {
     context.commit('SET_LOGGED_OUT')
+  },
+  changePassword (context, payload) {
+    const token = context.state.loginToken
+    const oldSum = crypto.createHash('sha256').update(payload.oldPassword, 'utf8').digest('hex')
+    const newSum = crypto.createHash('sha256').update(payload.newPassword, 'utf8').digest('hex')
+
+    console.log(`oldSum: ${oldSum}`)
+
+    axios.post('/api/private/change_password', { oldSum, newSum }, {
+      headers: {
+        Authorization: token
+      }
+    }).then((response) => {
+      payload.cb()
+    }, (err) => {
+      payload.cb(err.response.data.errors[0])
+    })
   }
 }
 
