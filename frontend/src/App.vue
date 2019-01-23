@@ -57,7 +57,9 @@
     <v-snackbar v-model="noti.show"
                 :color="noti.color"
                 :timeout="noti.timeout"> {{ noti.msg }}
-      <v-btn flat @click="noti.show = false">Close</v-btn>
+      <v-btn flat @click="noti.show = false">
+        <v-icon>close</v-icon>
+      </v-btn>
     </v-snackbar>
 
     <v-dialog v-model="showLoggingOutDialog" persistent max-width="400px">
