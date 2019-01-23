@@ -9,6 +9,7 @@ function change_password(req, res) {
   }
 
   user.change_password(res.locals.uinfo.user.id,
+    req.body.id,
     req.body.oldSum,
     req.body.newSum,
     (err) => {

@@ -91,7 +91,7 @@ const actions = {
 
     console.log(`oldSum: ${oldSum}`)
 
-    axios.post('/api/private/change_password', { oldSum, newSum }, {
+    axios.post('/api/private/change_password', { id: payload.id, oldSum, newSum }, {
       headers: {
         Authorization: token
       }
@@ -115,6 +115,9 @@ const getters = {
   },
   isAdmin (state) {
     return state.admin
+  },
+  userID (state) {
+    return state.userID
   }
 }
 

@@ -134,13 +134,29 @@ describe('user module', () => {
     const newSum = crypto.createHash('sha256').update('new_password', 'utf8').digest('hex');
     const oldSum = config.data.user_mgmt.users[0].password;
 
-    user.change_password('admin', oldSum, newSum, (err) => {
+    user.change_password('admin', 'admin', oldSum, newSum, (err) => {
       assert.equal(err, undefined);
       assert.equal(config.data.user_mgmt.users[0].password, newSum);
 
-      user.change_password('admin', newSum, oldSum, (err) => {
+      user.change_password('admin', 'admin', newSum, oldSum, (err) => {
         assert.equal(err, undefined);
         assert.equal(config.data.user_mgmt.users[0].password, oldSum);
+        done();
+      });
+    });
+  });
+
+  it('update_password test - no capability', (done) => {
+    const newSum = crypto.createHash('sha256').update('new_password', 'utf8').digest('hex');
+    const oldSum = config.data.user_mgmt.users[0].password;
+
+    user.change_password('hkim', 'admin', oldSum, newSum, (err) => {
+      assert.equal(err, 'need admin capability to change other accounts\' password');
+
+      // simulate login
+      user.login('hkim', csum2)
+      user.change_password('hkim', 'admin', oldSum, newSum, (err) => {
+        assert.equal(err, 'need admin capability to change other accounts\' password');
         done();
       });
     });

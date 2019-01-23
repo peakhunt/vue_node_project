@@ -42,8 +42,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Settings',
+  computed: {
+    ...mapGetters([
+      'userID'
+    ])
+  },
   data () {
     return {
       oldPassword: '',
@@ -60,6 +67,7 @@ export default {
     changePassword () {
       console.log('trying to update password')
       this.$store.dispatch('changePassword', {
+        id: this.userID,
         oldPassword: this.oldPassword,
         newPassword: this.newPassword1,
         cb: (err) => {

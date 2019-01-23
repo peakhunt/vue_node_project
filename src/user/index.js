@@ -110,7 +110,18 @@ function decode(token, cb) {
   });
 }
 
-function change_password(id, old_sum, new_sum, cb) {
+function change_password(from_id, id, old_sum, new_sum, cb) {
+  if (from_id !== id) {
+    const linfo = get_login_info(from_id);
+
+    if(linfo === undefined || !linfo.uinfo.user.admin) {
+      process.nextTick(() => {
+        cb('need admin capability to change other accounts\' password');
+      });
+      return;
+    }
+  }
+
   config_update.update_password(id, old_sum, new_sum, cb);
 }
 
