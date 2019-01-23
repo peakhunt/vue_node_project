@@ -1,0 +1,71 @@
+<template>
+  <v-container>
+    <v-layout justify-center>
+      <v-flex xs12 sm8>
+        <v-card class="elevation-12">
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Change Password</div>
+            </div>
+          </v-card-title>
+
+          <v-card-text>
+            <v-form v-model="valid">
+              <v-text-field v-model="orgPassword"
+                            prepend-icon="lock"
+                            type="password"
+                            label="Original Password"
+                            :rules="[rules.requiredOrgPass]" />
+              <v-text-field v-model="newPassword1"
+                            prepend-icon="lock"
+                            type="password"
+                            label="New Password"
+                            :rules="[rules.requiredNewPass]"/>
+              <v-text-field v-model="newPassword2"
+                            prepend-icon="lock"
+                            type="password"
+                            label="New Password Aain"
+                            :rules="[rules.requiredNewPass]"
+                            :error-messages="passwordMatchError()"/>
+            </v-form>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn :disabled="!valid" color="primary" @click="changePassword">Change</v-btn>
+          </v-card-actions>
+
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+export default {
+  name: 'Settings',
+  data () {
+    return {
+      orgPassword: '',
+      newPassword1: '',
+      newPassword2: '',
+      valid: true,
+      rules: {
+        requiredOrgPass: value => !!value || 'Please enter original password.',
+        requiredNewPass: value => !!value || 'Please enter new password.'
+      }
+    }
+  },
+  methods: {
+    changePassword () {
+      console.log('trying to update password')
+    },
+    passwordMatchError () {
+      return (this.newPassword1 === this.newPassword2) ? '' : 'Passowrd doesn\'t match'
+    }
+  }
+}
+</script>
+
+<style scoped>
+</style>

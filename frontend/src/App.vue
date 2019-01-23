@@ -107,7 +107,8 @@ export default {
       },
       navItems: [
         { icon: 'apps', title: 'Main', to: '/' },
-        { icon: 'apps', title: 'About', to: '/about' }
+        { icon: 'apps', title: 'About', to: '/about' },
+        { icon: 'settings', title: 'Settings', to: '/settings' }
       ]
     }
   },
