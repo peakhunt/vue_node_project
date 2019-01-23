@@ -7,11 +7,10 @@ const config_json = config.data;
 function update_config_json(cb) {
   logger.info(JSON.stringify(config_json));
   writeFileAtomic('config.json', JSON.stringify(config_json), {}, (err) => {
-    if (err) {
-      logger.error(`writeFilesAtomic error: ${err}`);
-    } else {
-      logger.info('writeFilesAtomic successful');
-    }
+    /* istanbul ignore next */
+    const msg = !!err ? `error ${err}` : 'successful';
+
+    logger.info(`writeFilesAtomic: ${msg}`);
     cb(err);
   });
 }
@@ -49,10 +48,8 @@ function update_password(id, old_sum, new_sum, cb) {
 
   user.password = new_sum;
   return update_config_json((err) => {
-    if (err) {
-      cb('storage update error');
-    }
-    cb(undefined);
+    /* istanbul ignore next */
+    cb(!!err ? 'storage update error' : undefined);
   });
 }
 
