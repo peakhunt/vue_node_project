@@ -137,6 +137,28 @@ const actions = {
       }, (err) => {
         cb(err)
       })
+  },
+  addNewUser (context, payload) {
+    const csum = crypto.createHash('sha256').update(payload.password, 'utf8').digest('hex')
+
+    commonPrivatePost(context, '/api/private/add_user',
+      { id: payload.id, password: csum, admin: payload.admin },
+      (resposne) => {
+        payload.cb()
+      }, (err) => {
+        payload.cb(err)
+      })
+  },
+  updateUser (context, payload) {
+    const csum = crypto.createHash('sha256').update(payload.password, 'utf8').digest('hex')
+
+    commonPrivatePost(context, '/api/private/change_user',
+      { id: payload.id, password: csum, admin: payload.admin },
+      (resposne) => {
+        payload.cb()
+      }, (err) => {
+        payload.cb(err)
+      })
   }
 }
 
