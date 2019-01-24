@@ -15,23 +15,23 @@ function update_config_json(cb) {
   });
 }
 
-function get_user_info(id) {
+function get_user_info_from_storage(id) {
   const users = config_json.user_mgmt.users;
 
   for (let i = 0; i < users.length; i += 1) {
     const user = users[i];
 
     if (user.id === id) {
-      return user;
+      return { user, ndx: i };
     }
   }
-  return null;
+  return { user: undefined, ndx: undefined };
 }
 
 function update_password(id, old_sum, new_sum, cb) {
-  const user = get_user_info(id);
+  const { user } = get_user_info_from_storage(id);
 
-  if (user === null) {
+  if (user === undefined) {
     return process.nextTick(() => {
       cb(`cannot find user info for ${id}`);
     });
@@ -53,7 +53,75 @@ function update_password(id, old_sum, new_sum, cb) {
   });
 }
 
+function add_user(id, csum, isAdmin, cb) {
+  const { user } = get_user_info_from_storage(id);
+
+  if (user !== undefined) {
+    return process.nextTick(() => {
+      cb(`${id} already exists`);
+    });
+  }
+
+  const u = {
+    id,
+    password: csum,
+    admin: isAdmin
+  };
+
+  const users = config_json.user_mgmt.users;
+
+  users.push(u);
+
+  return update_config_json((err) => {
+    /* istanbul ignore next */
+    cb(err ? 'storage update error' : undefined);
+  });
+}
+
+function del_user(id, cb) {
+  const { user, ndx } = get_user_info_from_storage(id);
+
+  if (user === undefined) {
+    return process.nextTick(() => {
+      cb(`${id} does not exist`);
+    });
+  }
+
+  const users = config_json.user_mgmt.users;
+
+  users.splice(ndx, 1);
+
+  return update_config_json((err) => {
+    /* istanbul ignore next */
+    cb(err ? 'storage update error' : undefined);
+  });
+}
+
+function change_user(id, csum, isAdmin, cb) {
+  const { user } = get_user_info_from_storage(id);
+
+  if (user === undefined) {
+    return process.nextTick(() => {
+      cb(`${id} does not exist`);
+    });
+  }
+
+  user.password = csum;
+  user.admin = isAdmin;
+
+  return update_config_json((err) => {
+    /* istanbul ignore next */
+    cb(err ? 'storage update error' : undefined);
+  });
+}
+
 module.exports = {
   data: config_json,
-  update_password
+  update_password,
+  add_user,
+  del_user,
+  change_user,
+  _private_for_test: {
+    get_user_info_from_storage
+  }
 };

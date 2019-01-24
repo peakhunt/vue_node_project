@@ -3,6 +3,7 @@ const moment = require('moment');
 const crypto = require('crypto');
 const user = require('../src/user');
 const config = require('../src/config');
+const config_update = require('../src/config_update');
 
 const csum1 = crypto.createHash('sha256').update('password', 'utf8').digest('hex');
 const csum2 = crypto.createHash('sha256').update('hkim', 'utf8').digest('hex');
@@ -158,6 +159,94 @@ describe('user module', () => {
       user.change_password('hkim', 'admin', oldSum, newSum, (err) => {
         assert.equal(err, 'need admin capability to change other accounts\' password');
         done();
+      });
+    });
+  });
+
+  it('add new user - no capability', (done) => {
+    user.login('hkim', csum2);
+    user.add_user('hkim', 'zolla', 'invalid csum', false, (err) => {
+      assert.equal(err, 'need admin capability to add new user');
+      user.del_user('hkim', 'admin', (err) => {
+        assert.equal(err, 'need admin capability to delete user');
+        done();
+      });
+    });
+  });
+
+  it('add new user - success', (done) => {
+    user.login('admin', csum1);
+    user.add_user('admin', 'zolla', csum2, false, (err) => {
+      assert.equal(err, undefined);
+
+      // already exists fail
+      user.add_user('admin', 'zolla', csum2, false, (err) => {
+        assert.equal(err, 'zolla already exists');
+
+        // delete user
+        user.del_user('admin', 'zolla', (err) => {
+          assert.equal(err, undefined);
+          done();
+        });
+      });
+    });
+  });
+
+  it('del not existing user', (done) => {
+    user.login('admin', csum1);
+    user.del_user('admin', 'nonexisting', (err) => {
+      assert.equal(err, 'nonexisting does not exist');
+      done();
+    });
+  });
+
+  it('change user - no capability', (done) => {
+    user.change_user('hkim', 'admin', 'invalid sum', false, (err) => {
+      assert.equal(err, 'need admin capability to change user');
+      done();
+    });
+  });
+
+  it('change user - success', (done) => {
+    const uid = 'zolla2'
+    user.login('admin', csum1);
+    user.add_user('admin', uid, csum2, false, (err) => {
+      assert.equal(err, undefined);
+
+      var { user: ui } = config_update._private_for_test.get_user_info_from_storage(uid);
+
+      console.log('====================');
+      console.log(ui);
+      console.log('====================');
+
+      assert.notStrictEqual(ui, undefined);
+      assert.equal(ui.id, uid);
+      assert.equal(ui.password, csum2);
+      assert.equal(ui.admin, false);
+
+      user.change_user('admin', uid, csum1, true, (err) => {
+        assert.equal(err, undefined);
+
+        var { user: ui } = config_update._private_for_test.get_user_info_from_storage(uid);
+
+        assert.notStrictEqual(ui, undefined);
+        assert.equal(ui.id, uid);
+        assert.equal(ui.password, csum1);
+        assert.equal(ui.admin, true);
+
+        user.del_user('admin', uid, (err) => {
+          assert.equal(err, undefined);
+
+          var { user: ui } = config_update._private_for_test.get_user_info_from_storage(uid);
+
+          assert.equal(ui, undefined);
+
+          // not existing user
+          user.change_user('admin', uid, csum1, true, (err) => {
+            assert.equal(err, `${uid} does not exist`);
+            done();
+          });
+        });
       });
     });
   });

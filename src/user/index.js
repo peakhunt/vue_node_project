@@ -7,6 +7,19 @@ const logger = require('../logger');
 const logged_in_users = {
 };
 
+function get_user_from_storage(id) {
+  const users = config.data.user_mgmt.users;
+
+  for (let i = 0; i < users.length; i += 1) {
+    const user = users[i];
+
+    if (user.id === id) {
+      return user;
+    }
+  }
+  return undefined;
+}
+
 function get_login_info(id) {
   return logged_in_users[id];
 }
@@ -47,21 +60,18 @@ function login(id, csum) {
     return { status: false, token: undefined, admin: false };
   }
 
-  const users = config.data.user_mgmt.users;
+  const user = get_user_from_storage(id);
 
-  for (let i = 0; i < users.length; i += 1) {
-    const user = users[i];
-
-    if (user.id === id && user.password === csum) {
-      return {
-        status: true,
-        token: login_user(user),
-        admin: user.admin
-      };
-    }
+  if (user === undefined || user.password !== csum) {
+    logger.info(`${id} failed to login`);
+    return { status: false, token: undefined, admin: false };
   }
-  logger.info(`${id} failed to login`);
-  return { status: false, token: undefined, admin: false };
+
+  return {
+    status: true,
+    token: login_user(user),
+    admin: user.admin
+  };
 }
 
 function logout(id) {
@@ -132,12 +142,50 @@ function change_password(from_id, id, old_sum, new_sum, cb) {
   config_update.update_password(id, old_sum, new_sum, cb);
 }
 
+function add_user(from_id, id, csum, isAdmin, cb) {
+  if (admin_cap_check(from_id) === false) {
+    process.nextTick(() => {
+      cb('need admin capability to add new user');
+    });
+    return;
+  }
+
+  config_update.add_user(id, csum, isAdmin, cb);
+}
+
+function del_user(from_id, id, cb) {
+  if (admin_cap_check(from_id) === false) {
+    process.nextTick(() => {
+      cb('need admin capability to delete user');
+    });
+    return;
+  }
+
+  logout(id);
+  config_update.del_user(id, cb);
+}
+
+function change_user(from_id, id, csum, isAdmin, cb) {
+  if (admin_cap_check(from_id) === false) {
+    process.nextTick(() => {
+      cb('need admin capability to change user');
+    });
+    return;
+  }
+
+  config_update.change_user(id, csum, isAdmin, cb);
+}
+
+
 module.exports = {
   login,
   logout,
   authorize,
   decode,
   change_password,
+  add_user,
+  del_user,
+  change_user,
   _private_for_test: {
     get_login_info
   }
