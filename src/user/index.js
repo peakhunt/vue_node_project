@@ -176,6 +176,18 @@ function change_user(from_id, id, csum, isAdmin, cb) {
   config_update.change_user(id, csum, isAdmin, cb);
 }
 
+function get_all_users() {
+  const users = config.data.user_mgmt.users;
+  const ret = [];
+
+  for (let i = 0; i < users.length; i += 1) {
+    const user = users[i];
+
+    ret.push({ id: user.id, admin: user.admin });
+  }
+  return ret;
+}
+
 
 module.exports = {
   login,
@@ -186,6 +198,7 @@ module.exports = {
   add_user,
   del_user,
   change_user,
+  get_all_users,
   _private_for_test: {
     get_login_info
   }

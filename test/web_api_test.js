@@ -600,5 +600,33 @@ describe('private api test', () => {
               });
         });
   });
+
+  it('get all users', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          const token = res.body.token;
+
+          chai.request(server)
+              .get('/api/private/get_all_users')
+              .set('Authorization', token)
+              .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('users');
+
+                const users = res.body.users;
+
+                assert.equal(users.length, config.data.user_mgmt.users.length);
+                done();
+              });
+        });
+  });
 });
 

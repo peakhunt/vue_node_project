@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid grid-list-lg>
     <v-layout justify-center>
       <v-flex xs12 sm8>
         <v-card class="elevation-12">

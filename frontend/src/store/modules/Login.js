@@ -44,6 +44,44 @@ const mutations = {
   }
 }
 
+function commonPrivatePost (context, url, objToSend, callback, errback) {
+  const token = context.state.loginToken
+
+  axios.post(url, objToSend, {
+    headers: {
+      Authorization: token
+    }
+  }).then((response) => {
+    callback(response)
+  }, (err) => {
+    if (err.response.status === 403) {
+      context.commit('SET_LOGGED_OUT')
+      callback(err.response)
+      return
+    }
+    errback(err)
+  })
+}
+
+function commonPrivateGet (context, url, callback, errback) {
+  const token = context.state.loginToken
+
+  axios.get(url, {
+    headers: {
+      Authorization: token
+    }
+  }).then((response) => {
+    callback(response)
+  }, (err) => {
+    if (err.response.status === 403) {
+      context.commit('SET_LOGGED_OUT')
+      errback(err)
+      return
+    }
+    errback(err)
+  })
+}
+
 const actions = {
   login (context, payload) {
     const csum = crypto.createHash('sha256').update(payload.password, 'utf8').digest('hex')
@@ -63,43 +101,42 @@ const actions = {
     })
   },
   logout (context, cb) {
-    const token = context.state.loginToken
-
-    axios.post('/api/private/logout', {}, {
-      headers: {
-        Authorization: token
-      }
-    }).then((response) => {
-      cb()
-      context.commit('SET_LOGGED_OUT')
-    }, (err) => {
-      if (err.response.status === 403) {
-        cb()
+    commonPrivatePost(context, '/api/private/logout', {},
+      (response) => {
+        console.log('###### logout success ######')
         context.commit('SET_LOGGED_OUT')
-        return
+        cb()
+      }, (err) => {
+        console.log('###### logout failed ######')
+        cb(err)
       }
-      cb(err)
-    })
+    )
   },
   forceLogout (context) {
     context.commit('SET_LOGGED_OUT')
   },
   changePassword (context, payload) {
-    const token = context.state.loginToken
     const oldSum = crypto.createHash('sha256').update(payload.oldPassword, 'utf8').digest('hex')
     const newSum = crypto.createHash('sha256').update(payload.newPassword, 'utf8').digest('hex')
 
     console.log(`oldSum: ${oldSum}`)
 
-    axios.post('/api/private/change_password', { id: payload.id, oldSum, newSum }, {
-      headers: {
-        Authorization: token
+    commonPrivatePost(context, '/api/private/change_password',
+      { id: payload.id, oldSum, newSum },
+      (response) => {
+        payload.cb()
+      }, (err) => {
+        payload.cb(err.response.data.errors[0])
       }
-    }).then((response) => {
-      payload.cb()
-    }, (err) => {
-      payload.cb(err.response.data.errors[0])
-    })
+    )
+  },
+  getAllUsers (context, cb) {
+    commonPrivateGet(context, '/api/private/get_all_users',
+      (response) => {
+        cb(undefined, response.data)
+      }, (err) => {
+        cb(err)
+      })
   }
 }
 

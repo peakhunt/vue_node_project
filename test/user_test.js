@@ -250,4 +250,11 @@ describe('user module', () => {
       });
     });
   });
+
+  it('get all users', () => {
+    const users = user.get_all_users();
+
+    assert.notStrictEqual(users, undefined);
+    assert.equal(users.length, 2);
+  });
 });
