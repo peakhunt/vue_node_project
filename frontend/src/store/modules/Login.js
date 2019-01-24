@@ -159,6 +159,15 @@ const actions = {
       }, (err) => {
         payload.cb(err)
       })
+  },
+  delUser (context, payload) {
+    commonPrivatePost(context, '/api/private/del_user',
+      { id: payload.id },
+      (resposne) => {
+        payload.cb()
+      }, (err) => {
+        payload.cb(err)
+      })
   }
 }
 

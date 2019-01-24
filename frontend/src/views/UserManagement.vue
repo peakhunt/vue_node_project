@@ -23,8 +23,8 @@
                 <td width="200px">{{ props.item.id}} </td>
                 <td width="50px">{{ props.item.admin ? 'Yes' : 'No'}} </td>
                 <td>
-                  <v-icon small class="mr-2" @click="editItem(props.item)" :disabled="props.item.id==='admin'">edit</v-icon>
-                  <v-icon small @click="deleteItem(props.item)" :disabled="props.item.id==='admin'">delete</v-icon>
+                  <v-icon small class="mr-2" @click="editItem(props.item)" :disabled="props.item.id==='admin' || props.item.id===$store.getters.userID">edit</v-icon>
+                  <v-icon small @click="deleteItem(props.item)" :disabled="props.item.id==='admin' || props.item.id===$store.getters.userID">delete</v-icon>
                 </td>
               </template>
             </v-data-table>
@@ -39,8 +39,15 @@
 
     <user-mgmt-dialog :options="userMgmtDialogOpts" @close="onUserDialogClose" @cancel="onUserDialogCancel"/>
 
-    <v-dialog v-model="showDelDialog" persistent max-width="290">
+    <v-dialog v-model="delUserDialogOpts.show" persistent max-width="290">
       <v-card>
+        <v-card-title class="headline">Delete {{delUserDialogOpts.id}} ?</v-card-title>
+        <v-card-text>Are you sure you wanna delete {{delUserDialogOpts.id}}?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="delUser">OK</v-btn>
+          <v-btn flat color="primary" @click="delUserDialogOpts.show = false">Cancel</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
@@ -89,6 +96,10 @@ export default {
         password1: '',
         password2: '',
         admin: false
+      },
+      delUserDialogOpts: {
+        id: '',
+        show: false
       }
     }
   },
@@ -118,6 +129,8 @@ export default {
       this.userMgmtDialogOpts.show = true
     },
     deleteItem (item) {
+      this.delUserDialogOpts.id = item.id
+      this.delUserDialogOpts.show = true
     },
     addNewUser () {
       var self = this
@@ -145,6 +158,22 @@ export default {
         cb: (err) => {
           if (err) {
             self.$emit('add-notify', { msg: `failed to update user ${this.userMgmtDialogOpts.id}`, color: 'error' })
+            return
+          }
+          self.retrieveAllUsers()
+        }
+      })
+    },
+    delUser () {
+      var self = this
+
+      self.delUserDialogOpts.show = false
+
+      self.$store.dispatch('delUser', {
+        id: self.delUserDialogOpts.id,
+        cb: (err) => {
+          if (err) {
+            self.$emit('add-notify', { msg: `failed to del user ${this.delUserDialogOpts.id}`, color: 'error' })
             return
           }
           self.retrieveAllUsers()
