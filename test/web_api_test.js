@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const { server, listener } = require('../src');
 const config = require('../src/config');
+const config_update = require('../src/config_update');
 
 const should = chai.should();
 
@@ -403,6 +404,201 @@ describe('private api test', () => {
 
       test_password_change_task1_login(done, user, oldSum, newSum);
     });
+  });
+
+  it('add user test - invalid request', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/add_user')
+              .set('Authorization', token)
+              .send({ password: csum1, admin: true })
+              .end((err, res) => {
+                res.should.have.status(422);
+                done();
+              });
+        });
+  });
+
+  it('add user test', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/add_user')
+              .set('Authorization', token)
+              .send({ id: 'test', password: csum1, admin: true })
+              .end((err, res) => {
+                res.should.have.status(200);
+
+                var { user: ui } = config_update._private_for_test.get_user_info_from_storage('test');
+
+                assert.notStrictEqual(ui, undefined);
+                assert.equal(ui.id, 'test');
+                assert.equal(ui.password, csum1);
+                assert.equal(ui.admin, true);
+
+                // already registered
+                chai.request(server)
+                    .post('/api/private/add_user')
+                    .set('Authorization', token)
+                    .send({ id: 'test', password: csum1, admin: true })
+                    .end((err, res) => {
+                      res.should.have.status(406);
+                      done();
+                    });
+              });
+        });
+  });
+
+  it('change user test - invalid request', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/change_user')
+              .set('Authorization', token)
+              .send({ password: csum1, admin: true })
+              .end((err, res) => {
+                res.should.have.status(422);
+                done();
+              });
+        });
+  });
+
+  it('change user test', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/change_user')
+              .set('Authorization', token)
+              .send({ id: 'test', password: csum1, admin: false })
+              .end((err, res) => {
+                res.should.have.status(200);
+
+                var { user: ui } = config_update._private_for_test.get_user_info_from_storage('test');
+
+                assert.notStrictEqual(ui, undefined);
+                assert.equal(ui.id, 'test');
+                assert.equal(ui.password, csum1);
+                assert.equal(ui.admin, false);
+
+                // change request on non existing user
+                chai.request(server)
+                    .post('/api/private/change_user')
+                    .set('Authorization', token)
+                    .send({ id: 'test2', password: csum1, admin: true })
+                    .end((err, res) => {
+                      res.should.have.status(406);
+                      done();
+                    });
+              });
+        });
+  });
+
+  it('del user test - invalid request', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/del_user')
+              .set('Authorization', token)
+              .send({  })
+              .end((err, res) => {
+                res.should.have.status(422);
+                done();
+              });
+        });
+  });
+
+  it('del user test', (done) => {
+    const user = {
+      username: 'admin',
+      csum: config.data.user_mgmt.users[0].password
+    };
+
+    chai.request(server)
+        .post('/api/public/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+
+          const token = res.body.token;
+
+          chai.request(server)
+              .post('/api/private/del_user')
+              .set('Authorization', token)
+              .send({ id: 'test' })
+              .end((err, res) => {
+                res.should.have.status(200);
+
+                var { user: ui } = config_update._private_for_test.get_user_info_from_storage('test');
+
+                assert.equal(ui, undefined);
+
+                // delete on non existing user
+                chai.request(server)
+                    .post('/api/private/del_user')
+                    .set('Authorization', token)
+                    .send({ id: 'test' })
+                    .end((err, res) => {
+                      res.should.have.status(406);
+                      done();
+                    });
+              });
+        });
   });
 });
 

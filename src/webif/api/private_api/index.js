@@ -2,6 +2,9 @@ const user = require('../../../user');
 const hello = require('./hello');
 const logout = require('./logout');
 const change_password = require('./change_password');
+const add_user = require('./add_user');
+const del_user = require('./del_user');
+const change_user = require('./change_user');
 
 function authorize(req, res, next) {
   if (!req.headers.authorization) {
@@ -30,6 +33,9 @@ function private_api_init(router) {
   hello(router);
   logout(router);
   change_password(router);
+  add_user(router);
+  del_user(router);
+  change_user(router);
 }
 
 module.exports = private_api_init;
