@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'dev';
-
 const { createLogger, format, transports } = require('winston');
 const config = require('../config');
 
@@ -28,6 +26,6 @@ const logger = createLogger({
   ]
 });
 
-logger.info('logger created');
+logger.error(`logger created with log level ${level}`);
 
 module.exports = logger;
