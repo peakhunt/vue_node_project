@@ -1,5 +1,5 @@
 <template>
-  <v-parallax src="vbanner.jpg" style="height:100%">
+  <v-parallax src="vbanner.jpg" height="100vh" style="height:100%">
     <v-layout align-center justify-center v-if="!loginProgress">
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
