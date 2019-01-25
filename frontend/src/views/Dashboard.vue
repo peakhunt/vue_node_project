@@ -78,7 +78,7 @@
         <v-layout row wrap>
           <!-- right top -->
           <v-flex d-flex xs12>
-            <v-card color="indigo" dark>
+            <v-card color="indigo" height="100%">
               <v-card-text>Right Top System Status Will Be Shown Here {{msg}}</v-card-text>
             </v-card>
           </v-flex>
@@ -86,17 +86,8 @@
           <!-- right bottom -->
           <v-flex d-flex xs12>
             <v-card>
-              <v-sheet>
-                <v-sparkline
-                 :value="value"
-                 color="rgba(255, 255, 255, .7)"
-                 height="100"
-                 padding="24"
-                 stroke-linecap="round"
-                 smooth
-                >
-                  <template slot="label" slot-scope="item">${{ item.value }}</template>
-                </v-sparkline>
+              <v-sheet class="lime lighten-5" height="100%">
+                <line-chart :chartdata="chartData" :options="chartOpts"></line-chart>
               </v-sheet>
             </v-card>
           </v-flex>
@@ -110,9 +101,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import LineChart from '@/components/LineChart'
 
 export default {
   name: 'Dashboard',
+  components: {
+    LineChart
+  },
   computed: {
     ...mapGetters([
       'currentTime',
@@ -125,6 +120,11 @@ export default {
       return 'person'
     }
   },
+  methods: {
+    getRandomInt () {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    }
+  },
   data () {
     return {
       msg: `blah blah blah blah blah blah blah blah blah blah blah blah
@@ -133,15 +133,78 @@ export default {
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah`,
-      value: [
-        423,
-        446,
-        675,
-        510,
-        590,
-        610,
-        760
-      ]
+      chartData: {
+        labels: [
+          0, 0,
+          0, 0,
+          0, 0,
+          0, 0,
+          0, 0,
+          0, 0
+        ],
+        datasets: [
+          {
+            label: 'Data One',
+            borderColor: '#f87979',
+            fill: false,
+            pointRadius: 1.5,
+            data: [
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt()
+            ]
+          }, {
+            label: 'Data Two',
+            borderColor: '#080909',
+            fill: false,
+            pointRadius: 1.5,
+            data: [
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt(),
+              this.getRandomInt(), this.getRandomInt()
+            ]
+          }
+        ]
+      },
+      chartOpts: {
+        maintainAspectRatio: false,
+        responsive: true,
+        elements: {
+          point: {
+            radius: 0.5
+          }
+        },
+        scales: {
+          xAxes: [
+            {
+              grindLines: {
+                display: true
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'time'
+              }
+            }
+          ],
+          yAxes: [
+            {
+              grindLines: {
+                display: true
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'value'
+              }
+            }
+          ]
+        }
+      }
     }
   }
 }
