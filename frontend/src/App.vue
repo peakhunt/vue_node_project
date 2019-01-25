@@ -3,7 +3,7 @@
     <v-toolbar v-if="isLoggedIn">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">
-        <span class="font-weight-light">Your App</span>
+        <span class="font-weight-light">사랑의 빠떼리</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -161,12 +161,12 @@ export default {
     },
     performLoginStartup () {
       console.log('###### performLoginStartup')
-      // XXX FIXME
+      this.$store.dispatch('initializeTime')
     },
     performLogoutCleanup () {
       console.log('###### performLogoutCleanup')
       this.$router.push('/')
-      // XXX FIXME
+      this.$store.dispatch('deinitializeTime')
     },
     showProgressIndicator (msg) {
       this.progressIndicator.message = msg
