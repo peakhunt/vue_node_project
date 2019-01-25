@@ -21,7 +21,8 @@
           <v-flex d-flex xs12>
             <v-card dark>
               <v-card-text>
-                절감요금
+                <span class="light-blue--text">절감요금</span>
+                <v-divider></v-divider>
                 <v-layout row>
                   <v-flex xs6>
                     <v-text-field label="주간 절감요금"
@@ -37,7 +38,8 @@
                   </v-flex>
                 </v-layout>
 
-                피크저감관리
+                <span class="light-blue--text">피크저감관리</span>
+                <v-divider></v-divider>
                 <v-layout row>
                   <v-flex xs6>
                     <v-text-field label="금일 최대부하"
@@ -83,8 +85,19 @@
 
           <!-- right bottom -->
           <v-flex d-flex xs12>
-            <v-card color="red lighten-2" dark>
-              <v-card-text>Right Bottom Charts Will Be Shown Here {{msg}}</v-card-text>
+            <v-card>
+              <v-sheet>
+                <v-sparkline
+                 :value="value"
+                 color="rgba(255, 255, 255, .7)"
+                 height="100"
+                 padding="24"
+                 stroke-linecap="round"
+                 smooth
+                >
+                  <template slot="label" slot-scope="item">${{ item.value }}</template>
+                </v-sparkline>
+              </v-sheet>
             </v-card>
           </v-flex>
 
@@ -120,7 +133,15 @@ export default {
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah`,
-      dateTime: new Date().toISOString().substr(0, 10)
+      value: [
+        423,
+        446,
+        675,
+        510,
+        590,
+        610,
+        760
+      ]
     }
   }
 }
