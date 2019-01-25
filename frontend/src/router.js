@@ -4,6 +4,7 @@ import About from './views/About.vue'
 import Main from './views/Main.vue'
 import Settings from './views/Settings.vue'
 import UserManagement from './views/UserManagement'
+import Dashboard from './views/Dashboard'
 
 Vue.use(Router)
 
@@ -11,6 +12,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Default Route',
+      component: Dashboard
+    },
+    {
+      path: '/Main',
       name: 'Main',
       component: Main
     },
@@ -28,6 +34,15 @@ export default new Router({
       path: '/user_management',
       name: 'User Management',
       component: UserManagement
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })
