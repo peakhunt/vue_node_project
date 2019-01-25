@@ -7,6 +7,22 @@
       <v-divider class="mx-3" inset vertical></v-divider>
       <span class="subheading">Dashboard</span>
       <v-spacer></v-spacer>
+
+      <v-menu open-on-hover bottom offset-y transition="slide-y-transition">
+        <v-chip slot="activator" color="primary">
+          <v-icon >{{userIcon}}</v-icon>
+          {{userID}}
+        </v-chip>
+        <v-list>
+          <v-list-tile @click="$router.push('user_management')">
+            <v-list-tile-title>User Management</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="doLogout()">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+
       <v-toolbar-items>
         <v-btn flat>Blah</v-btn>
         <v-divider vertical></v-divider>
@@ -102,8 +118,16 @@ export default {
   computed: {
     ...mapGetters([
       'isLoggedIn',
-      'http403Error'
-    ])
+      'http403Error',
+      'isAdmin',
+      'userID'
+    ]),
+    userIcon () {
+      if (this.isAdmin) {
+        return 'supervisor_account'
+      }
+      return 'person'
+    }
   },
   components: {
     Login

@@ -17,18 +17,6 @@
             </v-card>
           </v-flex>
 
-          <!-- left middle -->
-          <v-flex d-flex xs12>
-            <v-card color="green lighten-2" dark>
-              <v-card-text>You are logged in as
-                <v-chip color="primary" text-color="white" @click="$router.push('user_management')">
-                  <v-icon >{{userIcon}}</v-icon>
-                  {{userID}}
-                </v-chip>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-
           <!-- left bottom -->
           <v-flex d-flex xs12>
             <v-card color="blue lighten-2" dark>
@@ -68,8 +56,6 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'isAdmin',
-      'userID'
     ]),
     userIcon () {
       if (this.isAdmin) {
