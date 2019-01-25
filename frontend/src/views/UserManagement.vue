@@ -132,14 +132,15 @@ export default {
       this.delUserDialogOpts.id = item.id
       this.delUserDialogOpts.show = true
     },
-    addNewUser () {
-      var self = this
+    doAddNewUser () {
+      const self = this
 
       self.$store.dispatch('addNewUser', {
         id: self.userMgmtDialogOpts.id,
         password: self.userMgmtDialogOpts.password1,
         admin: self.userMgmtDialogOpts.admin,
         cb: (err) => {
+          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to add user ${this.userMgmtDialogOpts.id}`, color: 'error' })
             return
@@ -148,14 +149,23 @@ export default {
         }
       })
     },
-    updateUser () {
-      var self = this
+    addNewUser () {
+      const self = this
+
+      self.$emit('showProgress', 'Adding New User...')
+      setTimeout(() => {
+        self.doAddNewUser()
+      }, 500)
+    },
+    doUpdateUser () {
+      const self = this
 
       self.$store.dispatch('updateUser', {
         id: self.userMgmtDialogOpts.id,
         password: self.userMgmtDialogOpts.password1,
         admin: self.userMgmtDialogOpts.admin,
         cb: (err) => {
+          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to update user ${this.userMgmtDialogOpts.id}`, color: 'error' })
             return
@@ -164,14 +174,21 @@ export default {
         }
       })
     },
-    delUser () {
-      var self = this
+    updateUser () {
+      const self = this
 
-      self.delUserDialogOpts.show = false
+      self.$emit('showProgress', 'Updating User...')
+      setTimeout(() => {
+        self.doUpdateUser()
+      }, 500)
+    },
+    doDelUser () {
+      const self = this
 
       self.$store.dispatch('delUser', {
         id: self.delUserDialogOpts.id,
         cb: (err) => {
+          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to del user ${this.delUserDialogOpts.id}`, color: 'error' })
             return
@@ -179,6 +196,16 @@ export default {
           self.retrieveAllUsers()
         }
       })
+    },
+    delUser () {
+      const self = this
+
+      self.delUserDialogOpts.show = false
+      self.$emit('showProgress', 'Deleting User...')
+
+      setTimeout(() => {
+        self.doDelUser()
+      }, 500)
     },
     newUserClicked () {
       this.userMgmtDialogOpts.title = 'Add New User'

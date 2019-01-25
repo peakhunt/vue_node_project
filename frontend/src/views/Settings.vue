@@ -64,20 +64,31 @@ export default {
     }
   },
   methods: {
-    changePassword () {
+    doChangePassword () {
+      const self = this
+
       console.log('trying to update password')
-      this.$store.dispatch('changePassword', {
-        id: this.userID,
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword1,
+      self.$store.dispatch('changePassword', {
+        id: self.userID,
+        oldPassword: self.oldPassword,
+        newPassword: self.newPassword1,
         cb: (err) => {
+          self.$emit('hideProgress')
           if (err) {
             const msg = 'Password update failed: ' + err
-            return this.$emit('add-notify', { msg, color: 'error' })
+            return self.$emit('add-notify', { msg, color: 'error' })
           }
-          return this.$emit('add-notify', { msg: 'Password Updated', color: 'success' })
+          return self.$emit('add-notify', { msg: 'Password Updated', color: 'success' })
         }
       })
+    },
+    changePassword () {
+      const self = this
+
+      self.$emit('showProgress', 'Updating Password...')
+      setTimeout(() => {
+        self.doChangePassword()
+      }, 500)
     },
     passwordMatchError () {
       return (this.newPassword1 === this.newPassword2) ? '' : 'Passowrd doesn\'t match'

@@ -37,7 +37,10 @@
     </v-navigation-drawer>
 
     <v-content>
-      <router-view v-if="isLoggedIn" v-on:add-notify="addNotify"/>
+      <router-view v-if="isLoggedIn"
+       v-on:add-notify="addNotify"
+       v-on:showProgress="showProgressIndicator"
+       v-on:hideProgress="hideProgressIndicator"/>
       <login v-if="!isLoggedIn"/>
     </v-content>
 
@@ -62,9 +65,9 @@
       </v-btn>
     </v-snackbar>
 
-    <v-dialog v-model="showLoggingOutDialog" persistent max-width="400px">
+    <v-dialog v-model="progressIndicator.show" persistent max-width="400px">
       <v-card color="primary">
-        <v-card-text> Logging Out...
+        <v-card-text> {{ progressIndicator.message }}
           <v-progress-linear
             indeterminate
             color="green"
@@ -112,7 +115,11 @@ export default {
         { icon: 'apps', title: 'About', to: '/about' },
         { icon: 'settings', title: 'Settings', to: '/settings' },
         { icon: 'settings', title: 'User Management', to: '/user_management' }
-      ]
+      ],
+      progressIndicator: {
+        show: false,
+        message: ''
+      }
     }
   },
   methods: {
@@ -120,10 +127,11 @@ export default {
       const self = this
 
       console.log('logout called')
-      self.showLoggingOutDialog = true
+      this.showProgressIndicator('Logging Out...')
       setTimeout(() => {
         self.$store.dispatch('logout', (err) => {
-          self.showLoggingOutDialog = false
+          this.hideProgressIndicator()
+
           if (err) {
             console.log('logout failed' + err)
             self.showNotification('logout failed', 'error')
@@ -159,6 +167,14 @@ export default {
       console.log('###### performLogoutCleanup')
       this.$router.push('/')
       // XXX FIXME
+    },
+    showProgressIndicator (msg) {
+      this.progressIndicator.message = msg
+      this.progressIndicator.show = true
+    },
+    hideProgressIndicator () {
+      this.progressIndicator.message = ''
+      this.progressIndicator.show = false
     }
   },
   watch: {
