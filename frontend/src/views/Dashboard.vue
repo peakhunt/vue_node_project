@@ -21,7 +21,10 @@
           <v-flex d-flex xs12>
             <v-card color="green lighten-2" dark>
               <v-card-text>You are logged in as
-                <v-chip color="primary" text-color="white">{{$store.getters.userID}}</v-chip>
+                <v-chip color="primary" text-color="white" @click="$router.push('user_management')">
+                  <v-icon >{{userIcon}}</v-icon>
+                  {{userID}}
+                </v-chip>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -59,8 +62,22 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Dashboard',
+  computed: {
+    ...mapGetters([
+      'isAdmin',
+      'userID'
+    ]),
+    userIcon () {
+      if (this.isAdmin) {
+        return 'supervisor_account'
+      }
+      return 'person'
+    }
+  },
   data () {
     return {
       msg: `blah blah blah blah blah blah blah blah blah blah blah blah

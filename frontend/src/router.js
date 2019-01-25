@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import About from './views/About.vue'
 import Main from './views/Main.vue'
-import Settings from './views/Settings.vue'
 import UserManagement from './views/UserManagement'
 import Dashboard from './views/Dashboard'
 
@@ -24,11 +23,6 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
-    },
-    {
-      path: '/settings',
-      name: 'Settings',
-      component: Settings
     },
     {
       path: '/user_management',

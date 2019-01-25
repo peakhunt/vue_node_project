@@ -1,14 +1,23 @@
 <template>
   <v-app dark>
     <v-toolbar v-if="isLoggedIn">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">
         <span class="font-weight-light">사랑의 빠떼리</span>
       </v-toolbar-title>
+      <v-divider class="mx-3" inset vertical></v-divider>
+      <span class="subheading">Dashboard</span>
       <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn flat>Blah</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn flat>Blah</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn flat>Blah</v-btn>
+      </v-toolbar-items>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     </v-toolbar>
 
-    <v-navigation-drawer v-if="isLoggedIn" v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-if="isLoggedIn" v-model="drawer" absolute temporary right>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
         <v-list-tile
@@ -161,6 +170,7 @@ export default {
     },
     performLoginStartup () {
       console.log('###### performLoginStartup')
+      this.drawer = false
       this.$store.dispatch('initializeTime')
     },
     performLogoutCleanup () {
