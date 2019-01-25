@@ -308,7 +308,9 @@ export default {
     }
   },
   created () {
-    this.retrieveAllUsers()
+    if (this.isAdmin) {
+      this.retrieveAllUsers()
+    }
   }
 }
 </script>

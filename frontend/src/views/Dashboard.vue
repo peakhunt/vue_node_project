@@ -10,17 +10,63 @@
             <v-card class="elevation-16">
               <v-card-text>
                 <v-layout justify-center>
-                  <span class="headline">{{$store.getters.currentTime}}</span>
+                  <span class="headline">{{currentTime}}</span>
                 </v-layout>
-                <v-date-picker readonly locale="kr" full-width v-model="$store.getters.currentDate" header-color="primary"></v-date-picker>
+                <v-date-picker readonly locale="kr" full-width v-model="currentDate" header-color="primary"></v-date-picker>
               </v-card-text>
             </v-card>
           </v-flex>
 
           <!-- left bottom -->
           <v-flex d-flex xs12>
-            <v-card color="blue lighten-2" dark>
-              <v-card-text>Left Bottom Some Stats Will Be Here {{msg}}</v-card-text>
+            <v-card dark>
+              <v-card-text>
+                절감요금
+                <v-layout row>
+                  <v-flex xs6>
+                    <v-text-field label="주간 절감요금"
+                                  readonly
+                                  suffix="원"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-text-field label="누적 절감요금"
+                                  readonly
+                                  suffix="원"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+
+                피크저감관리
+                <v-layout row>
+                  <v-flex xs6>
+                    <v-text-field label="금일 최대부하"
+                                  readonly
+                                  suffix="kW"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-text-field label="금년 최대부하"
+                                  readonly
+                                  suffix="kW"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs6>
+                    <v-text-field label="작년 최대부하"
+                                  readonly
+                                  suffix="kW"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-text-field label="피크 저감량"
+                                  readonly
+                                  suffix="kW"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
             </v-card>
           </v-flex>
         </v-layout>
@@ -56,6 +102,8 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
+      'currentTime',
+      'currentDate'
     ]),
     userIcon () {
       if (this.isAdmin) {
