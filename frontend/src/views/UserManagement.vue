@@ -105,9 +105,10 @@ export default {
   },
   methods: {
     retrieveAllUsers () {
-      var self = this
+      const self = this
 
       this.$store.dispatch('getAllUsers', (err, res) => {
+        self.$emit('hideProgress')
         if (err) {
           console.log('failed to get all users')
           this.$emit('add-notify', { msg: 'failed to retrieve users info from server', color: 'error' })
@@ -140,7 +141,6 @@ export default {
         password: self.userMgmtDialogOpts.password1,
         admin: self.userMgmtDialogOpts.admin,
         cb: (err) => {
-          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to add user ${this.userMgmtDialogOpts.id}`, color: 'error' })
             return
@@ -165,7 +165,6 @@ export default {
         password: self.userMgmtDialogOpts.password1,
         admin: self.userMgmtDialogOpts.admin,
         cb: (err) => {
-          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to update user ${this.userMgmtDialogOpts.id}`, color: 'error' })
             return
@@ -188,7 +187,6 @@ export default {
       self.$store.dispatch('delUser', {
         id: self.delUserDialogOpts.id,
         cb: (err) => {
-          self.$emit('hideProgress')
           if (err) {
             self.$emit('add-notify', { msg: `failed to del user ${this.delUserDialogOpts.id}`, color: 'error' })
             return
