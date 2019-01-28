@@ -1,12 +1,22 @@
 <template>
   <v-app dark>
     <v-toolbar v-if="isLoggedIn">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+
       <v-toolbar-title class="white--text">
         <span class="font-weight-light">사랑의 빠떼리</span>
       </v-toolbar-title>
       <v-divider class="mx-3" inset vertical></v-divider>
       <span class="subheading">Dashboard</span>
       <v-spacer></v-spacer>
+
+      <v-toolbar-items>
+        <v-btn flat>Blah</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn flat>Blah</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn flat>Blah</v-btn>
+      </v-toolbar-items>
 
       <v-menu open-on-hover bottom offset-y transition="slide-y-transition">
         <v-chip slot="activator" color="primary">
@@ -22,18 +32,9 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-
-      <v-toolbar-items>
-        <v-btn flat>Blah</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn flat>Blah</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn flat>Blah</v-btn>
-      </v-toolbar-items>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     </v-toolbar>
 
-    <v-navigation-drawer v-if="isLoggedIn" v-model="drawer" absolute temporary right>
+    <v-navigation-drawer v-if="isLoggedIn" v-model="drawer" absolute temporary left>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
         <v-list-tile
@@ -102,10 +103,12 @@
       </v-card>
     </v-dialog>
 
+    <!--
     <v-footer v-if="isLoggedIn" absolute class="pa-3">
       <v-spacer></v-spacer>
       <div>&copy; {{ new Date().getFullYear() }}</div>
     </v-footer>
+    -->
   </v-app>
 </template>
 

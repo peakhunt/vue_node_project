@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid grid-list-md>
+  <v-container fluid grid-list-md fill-height>
     <v-layout row wrap>
 
-      <v-flex d-flex xs12 sm6 md3>
+      <v-flex d-flex xs12 sm6 md2>
         <v-layout row wrap>
 
           <!-- left top -->
@@ -19,7 +19,7 @@
 
           <!-- left bottom -->
           <v-flex d-flex xs12>
-            <v-card dark>
+            <v-card class="elevation-16">
               <v-card-text>
                 <span class="light-blue--text">절감요금</span>
                 <v-divider></v-divider>
@@ -74,24 +74,51 @@
         </v-layout>
       </v-flex>
 
-      <v-flex d-flex xs12 sm6 md9>
+      <v-flex d-flex xs12 sm6 md8>
+        <v-layout row wrap>
+
+          <!-- middle top -->
+          <v-flex d-flex class="middle-top">
+            <v-card color="indigo" class="elevation-16">
+              <v-card-text>Middle Top System Status Will Be Shown Here {{msg}}</v-card-text>
+            </v-card>
+          </v-flex>
+
+          <!-- middle bottom -->
+          <v-flex d-flex class="middle-bottom">
+            <v-card class="elevation-16 text-xs-center">
+              <!-- guess it's apexcharts bug. without color style, toolbar menu gets white text
+                   which is inherited from the parent -->
+              <apexcharts style="color: black" type="area" height="100%" :options="options" :series="series">
+              </apexcharts>
+            </v-card>
+          </v-flex>
+
+        </v-layout>
+      </v-flex>
+
+      <v-flex d-flex xs12 sm6 md2>
         <v-layout row wrap>
           <!-- right top -->
-          <v-flex d-flex xs12>
-            <v-card color="indigo" height="100%">
+          <v-flex d-flex>
+            <v-card color="orange" class="elevation-16">
               <v-card-text>Right Top System Status Will Be Shown Here {{msg}}</v-card-text>
             </v-card>
           </v-flex>
 
-          <!-- right bottom -->
-          <v-flex d-flex xs12>
-            <v-card>
-              <v-sheet class="white" height="100%">
-                  <apexchart type="line" :options="options" :series="series"></apexchart>
-              </v-sheet>
+          <!-- right middle -->
+          <v-flex d-flex>
+            <v-card color="purple" class="elevation-16">
+              <v-card-text>Right Middle System Status Will Be Shown Here {{msg}}</v-card-text>
             </v-card>
           </v-flex>
 
+          <!-- right bottom -->
+          <v-flex d-flex>
+            <v-card color="cyan" class="elevation-16">
+              <v-card-text>Right Bottom System Status Will Be Shown Here {{msg}}</v-card-text>
+            </v-card>
+          </v-flex>
         </v-layout>
       </v-flex>
 
@@ -106,7 +133,7 @@ import VueApexCharts from 'vue-apexcharts'
 export default {
   name: 'Dashboard',
   components: {
-    'apexchart': VueApexCharts
+    'apexcharts': VueApexCharts
   },
   computed: {
     ...mapGetters([
@@ -135,20 +162,91 @@ export default {
             blah blah blah blah blah blah blah blah blah blah blah blah`,
       options: {
         chart: {
-          id: 'vuechart-example'
+          background: '#ffffff',
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800,
+            animateGradually: {
+              enabled: true,
+              delay: 150
+            },
+            dynamicAnimation: {
+              enabled: true,
+              speed: 350
+            }
+          },
+          dropShadow: {
+            enabled: true,
+            top: 0,
+            left: 0,
+            blue: 3,
+            opacity: 0.5
+          }
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'],
+            opacity: 0.5
+          }
+        },
+        title: {
+          text: 'Blah Blah Blah Data',
+          align: 'left'
+        },
+        dataLabels: {
+          enabled: false
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          type: 'datetime'
+        },
+        tooltip: {
+          theme: 'dark'
+        },
+        theme: {
+          palette: 'palette5'
         }
       },
-      series: [{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
-      }]
+      series: [
+        {
+          name: 'Series 1',
+          data: [
+            [1486684800000, 34],
+            [1486684900000, 44],
+            [1486685000000, 65],
+            [1486685100000, 63],
+            [1486685200000, 22],
+            [1486685300000, 37],
+            [1486685400000, 99],
+            [1486685500000, 11],
+            [1486685600000, 89],
+            [1486685700000, 90],
+            [1486685800000, 19],
+            [1486685900000, 33],
+            [1486686000000, 65],
+            [1486686100000, 63],
+            [1486686200000, 22],
+            [1486686300000, 37],
+            [1486686400000, 99],
+            [1486686500000, 11],
+            [1486686600000, 89],
+            [1486686700000, 90],
+            [1486686800000, 19],
+            [1486686900000, 33]
+          ]
+        }
+      ]
     }
   }
 }
 </script>
 
 <style scoped>
+.middle-top {
+  height: 50%;
+}
+
+.middle-bottom {
+  height: 50%;
+}
 </style>
