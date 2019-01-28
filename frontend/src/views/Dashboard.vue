@@ -86,8 +86,8 @@
           <!-- right bottom -->
           <v-flex d-flex xs12>
             <v-card>
-              <v-sheet class="lime lighten-5" height="100%">
-                <line-chart :chartdata="chartData" :options="chartOpts"></line-chart>
+              <v-sheet class="white" height="100%">
+                  <apexchart type="line" :options="options" :series="series"></apexchart>
               </v-sheet>
             </v-card>
           </v-flex>
@@ -101,12 +101,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LineChart from '@/components/LineChart'
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   name: 'Dashboard',
   components: {
-    LineChart
+    'apexchart': VueApexCharts
   },
   computed: {
     ...mapGetters([
@@ -133,78 +133,18 @@ export default {
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah`,
-      chartData: {
-        labels: [
-          0, 0,
-          0, 0,
-          0, 0,
-          0, 0,
-          0, 0,
-          0, 0
-        ],
-        datasets: [
-          {
-            label: 'Data One',
-            borderColor: '#f87979',
-            fill: false,
-            pointRadius: 1.5,
-            data: [
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt()
-            ]
-          }, {
-            label: 'Data Two',
-            borderColor: '#080909',
-            fill: false,
-            pointRadius: 1.5,
-            data: [
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt(),
-              this.getRandomInt(), this.getRandomInt()
-            ]
-          }
-        ]
-      },
-      chartOpts: {
-        maintainAspectRatio: false,
-        responsive: true,
-        elements: {
-          point: {
-            radius: 0.5
-          }
+      options: {
+        chart: {
+          id: 'vuechart-example'
         },
-        scales: {
-          xAxes: [
-            {
-              grindLines: {
-                display: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'time'
-              }
-            }
-          ],
-          yAxes: [
-            {
-              grindLines: {
-                display: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'value'
-              }
-            }
-          ]
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
         }
-      }
+      },
+      series: [{
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91]
+      }]
     }
   }
 }

@@ -39,11 +39,13 @@
     ]
   },
   "dependencies": {
+    "apexcharts": "^3.2.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.23.0",
+    "vue-apexcharts": "^1.2.8",
     "winston": "^3.1.0",
     "write-file-atomic": "^2.3.0"
   }
