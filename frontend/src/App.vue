@@ -1,6 +1,10 @@
 <template>
   <v-app dark>
-    <v-toolbar v-if="isLoggedIn">
+    <v-toolbar dense
+     fixed
+     clipped-left
+     app
+     v-if="isLoggedIn">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 
       <v-toolbar-title class="white--text">
@@ -10,13 +14,11 @@
       <span class="subheading">Dashboard</span>
       <v-spacer></v-spacer>
 
-      <v-toolbar-items>
-        <v-btn flat>Blah</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn flat>Blah</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn flat>Blah</v-btn>
-      </v-toolbar-items>
+      <v-divider class="mx-3" inset vertical></v-divider>
+      <span class="info--text headline font-weight-bold">Manual</span>
+      <v-divider class="mx-3" inset vertical></v-divider>
+      <v-icon large class="error--text">notification_important</v-icon>
+      <v-divider class="mx-3" inset vertical></v-divider>
 
       <v-menu open-on-hover bottom offset-y transition="slide-y-transition">
         <v-chip slot="activator" color="primary">

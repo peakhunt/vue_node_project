@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid">
+            <v-form v-model="valid" id="loginForm">
               <v-text-field v-model="id"
                             prepend-icon="person"
                             label="User ID"
@@ -26,7 +26,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn :disabled="!valid" color="primary" @click="doLogin">Login</v-btn>
+            <v-btn type="submit" form="loginForm" :disabled="!valid" color="primary" @click="doLogin">Login</v-btn>
           </v-card-actions>
         </v-card>
 

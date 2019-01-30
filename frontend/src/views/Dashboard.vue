@@ -2,7 +2,8 @@
   <v-container fluid grid-list-md fill-height>
     <v-layout row wrap>
 
-      <v-flex d-flex xs12 sm6 md2>
+      <!-- left start -->
+      <v-flex d-flex xs12 sm6 md2 class="left-common">
         <v-layout row wrap>
 
           <!-- left top -->
@@ -16,13 +17,13 @@
               </v-card-text>
             </v-card>
           </v-flex>
+          <!-- left top end -->
 
           <!-- left bottom -->
           <v-flex d-flex xs12>
             <v-card class="elevation-16">
+              <v-card-title class="light-blue--text title font-weight-bold">절감요금</v-card-title>
               <v-card-text>
-                <span class="light-blue--text">절감요금</span>
-                <v-divider></v-divider>
                 <v-layout row>
                   <v-flex xs6>
                     <v-text-field label="주간 절감요금"
@@ -37,9 +38,14 @@
                                   value="12345"></v-text-field>
                   </v-flex>
                 </v-layout>
+              </v-card-text>
+            </v-card>
+          </v-flex>
 
-                <span class="light-blue--text">피크저감관리</span>
-                <v-divider></v-divider>
+          <v-flex d-flex xs12>
+            <v-card class="elevation-16">
+              <v-card-title class="light-blue--text title font-weight-bold">피크저감관리</v-card-title>
+              <v-card-text>
                 <v-layout row>
                   <v-flex xs6>
                     <v-text-field label="금일 최대부하"
@@ -71,12 +77,14 @@
               </v-card-text>
             </v-card>
           </v-flex>
+          <!-- left bottom end -->
         </v-layout>
       </v-flex>
+      <!-- left end -->
 
-      <v-flex d-flex xs12 sm6 md8>
+      <!-- middle start -->
+      <v-flex d-flex xs12 sm6 md8 class="middle-common">
         <v-layout row wrap>
-
           <!-- middle top -->
           <v-flex d-flex class="middle-top">
             <v-card color="indigo" class="elevation-16">
@@ -96,31 +104,144 @@
 
         </v-layout>
       </v-flex>
+      <!-- middle end -->
 
-      <v-flex d-flex xs12 sm6 md2>
+      <!-- right start -->
+      <v-flex d-flex xs12 sm6 md2 class="right-common">
         <v-layout row wrap>
           <!-- right top -->
-          <v-flex d-flex>
-            <v-card color="orange" class="elevation-16">
-              <v-card-text>Right Top System Status Will Be Shown Here {{msg}}</v-card-text>
+          <v-flex d-flex xs12 class="right-top">
+            <v-card class="elevation-16 red" raised height="100%">
+              <v-carousel class="red" height="100%" cycle hide-delimiters interval="2500">
+                <v-carousel-item :key="0" style="height: 100%">
+                  <v-container fill-height justify-center class="text-xs-center blue">
+                    <span class="title font-weight-light">요금제</span>
+                    <span class="headline font-weight-bold">
+                      &nbsp;을)고압A&nbsp;
+                    </span>
+                    <span class="title font-weight-light">
+                      산업용
+                    </span>
+                  </v-container>
+                </v-carousel-item>
+
+                <v-carousel-item :key="1" style="height: 100%">
+                  <v-container fill-height justify-center class="text-xs-center green">
+                    <span class="title font-weight-light">적용부하</span>
+                    <span class="headline font-weight-bold">
+                      &nbsp;최대부하&nbsp;
+                    </span>
+                    <span class="title font-weight-light">
+                      시간대
+                    </span>
+                  </v-container>
+                </v-carousel-item>
+
+                <v-carousel-item :key="2" style="height: 100%">
+                  <v-container fill-height justify-center class="text-xs-center cyan">
+                    <span class="title font-weight-light">적용요금</span>
+                    <span class="headline font-weight-bold">
+                      &nbsp;166.7&nbsp;
+                    </span>
+                    <span class="title font-weight-light">
+                      원/kWh
+                    </span>
+                  </v-container>
+                </v-carousel-item>
+              </v-carousel>
             </v-card>
           </v-flex>
 
-          <!-- right middle -->
-          <v-flex d-flex>
-            <v-card color="purple" class="elevation-16">
-              <v-card-text>Right Middle System Status Will Be Shown Here {{msg}}</v-card-text>
+          <!-- right middle1 -->
+          <v-flex d-flex xs12 class="right-middle1">
+            <v-card class="elevation-16" raised>
+              <v-card-title class="title font-weight-bold light-blue--text">2월 13일</v-card-title>
+              <v-card-text>
+                <v-layout row wrap>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="전력 사용량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="총전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="방전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <!-- right middle2 -->
+          <v-flex d-flex xs12 class="right-middle2">
+            <v-card class="elevation-16" raised>
+              <v-card-title class="title font-weight-bold light-blue--text">2월 누적량</v-card-title>
+              <v-card-text>
+                <v-layout row wrap>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="전력 사용량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="총전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="방전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
             </v-card>
           </v-flex>
 
           <!-- right bottom -->
-          <v-flex d-flex>
-            <v-card color="cyan" class="elevation-16">
-              <v-card-text>Right Bottom System Status Will Be Shown Here {{msg}}</v-card-text>
+          <v-flex d-flex xs12 class="right-bottom">
+            <v-card class="elevation-16" raised>
+              <v-card-title class="title font-weight-bold light-blue--text">ESS 설치후 누적량</v-card-title>
+              <v-card-text>
+                <v-layout row wrap>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="전력 사용량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="총전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                  <v-flex d-flex xs6>
+                    <v-text-field label="방전량"
+                                  readonly
+                                  suffix="kWh"
+                                  value="12345"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
             </v-card>
           </v-flex>
+
         </v-layout>
       </v-flex>
+      <!-- right end -->
 
     </v-layout>
   </v-container>
@@ -235,6 +356,23 @@ export default {
             [1486686900000, 33]
           ]
         }
+      ],
+      price_plans: [
+        {
+          title: '전력 요금재',
+          value: '(을)고압A',
+          unit: '산업용'
+        },
+        {
+          title: '현재 적용부하',
+          value: '최대부하',
+          unit: '시간대'
+        },
+        {
+          title: '현재 요금단가',
+          value: '166.7',
+          unit: '원/kWh'
+        }
       ]
     }
   }
@@ -242,11 +380,56 @@ export default {
 </script>
 
 <style scoped>
+.left-common {
+  min-width: 20%;
+}
+
+.middle-common {
+  max-width: 60%;
+}
+
+.right-common {
+  min-width: 20%;
+}
+
+.right-top {
+  height: 10%;
+}
+
+.right-middle1 {
+  height: 30%;
+}
+
+.right-middle2 {
+  height: 30%;
+}
+
+.right-bottom {
+  height: 30%;
+}
+
 .middle-top {
   height: 50%;
 }
 
 .middle-bottom {
   height: 50%;
+}
+
+.mode-class {
+  font-size: 28px;
+  font-weight: bold;
+  color: #B2FF59;
+}
+
+.mode-bg-style {
+  border-radius: 5%;
+  background-color: #525252;
+  padding: 0;
+}
+
+.opr-status {
+  font-size: 80px;
+  color: #B2FF59;
 }
 </style>
