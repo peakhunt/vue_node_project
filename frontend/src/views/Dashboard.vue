@@ -85,19 +85,36 @@
       <!-- middle start -->
       <v-flex d-flex xs12 sm6 md8 class="middle-common">
         <v-layout row wrap>
+
           <!-- middle top -->
-          <v-flex d-flex class="middle-top">
-            <v-card color="indigo" class="elevation-16">
-              <v-card-text>Middle Top System Status Will Be Shown Here {{msg}}</v-card-text>
-            </v-card>
+          <v-flex d-flex xs12 class="middle-top">
+            <v-layout row wrap>
+              <!-- left -->
+              <v-flex d-flex xs9 sm9 md8 style="height: 100%">
+                <v-card class="elevation-16" height="100%">
+                </v-card>
+              </v-flex>
+              <!-- right -->
+              <v-flex d-flex xs3 sm3 md4>
+                <v-card class="elevation-16" height="100%">
+                  <!--
+                    XXX: FIXME
+                    why does adding height=100% here fuck up the whole chart including
+                    line chart when realtime update is applied???
+                  -->
+                  <apexcharts type="radialBar" :options="radialOptions" :series="radialSeries">
+                  </apexcharts>
+                </v-card>
+              </v-flex>
+            </v-layout>
           </v-flex>
 
           <!-- middle bottom -->
-          <v-flex d-flex class="middle-bottom">
-            <v-card class="elevation-16 text-xs-center">
+          <v-flex d-flex xs12 class="middle-bottom">
+            <v-card class="elevation-16 text-xs-center" height="100%">
               <!-- guess it's apexcharts bug. without color style, toolbar menu gets white text
                    which is inherited from the parent -->
-              <apexcharts style="color: black" type="area" height="100%" :options="options" :series="series">
+              <apexcharts height="100%" style="color: black" type="line" :options="options" :series="series">
               </apexcharts>
             </v-card>
           </v-flex>
@@ -268,13 +285,57 @@ export default {
       return 'person'
     }
   },
+  mounted () {
+    var self = this
+    var inc = [ true, true ]
+
+    self.timer = setInterval(() => {
+      self.testRadialChart(inc)
+      self.testLineChart()
+    }, 200)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
+  },
   methods: {
     getRandomInt () {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    },
+    testRadialChart (inc) {
+      var series = this.radialSeries.slice()
+
+      for (let i = 0; i < 2; i += 1) {
+        if (inc[i]) {
+          series[i] += 1
+        } else {
+          series[i] -= 1
+        }
+
+        if (series[i] > 100) {
+          series[i] = 100
+          inc[i] = false
+        }
+
+        if (series[i] < 0) {
+          series[i] = 0
+          inc[i] = true
+        }
+      }
+      this.radialSeries = series
+    },
+    testLineChart () {
+      var dataArray = this.series[0].data
+      const timestamp = dataArray[dataArray.length - 1][0] + 100000
+      const data = this.getRandomInt()
+      const newPair = [timestamp, data]
+
+      dataArray.splice(0, 1)
+      dataArray.push(newPair)
     }
   },
   data () {
     return {
+      timer: null,
       msg: `blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah
             blah blah blah blah blah blah blah blah blah blah blah blah
@@ -285,7 +346,7 @@ export default {
         chart: {
           background: '#ffffff',
           animations: {
-            enabled: true,
+            enabled: false,
             easing: 'easeinout',
             speed: 800,
             animateGradually: {
@@ -357,6 +418,60 @@ export default {
           ]
         }
       ],
+      radialSeries: [19, 100],
+      radialOptions: {
+        chart: {
+          animations: {
+            enabled: true
+          }
+        },
+        legend: {
+          show: true,
+          position: 'bottom',
+          fontSize: '22px',
+          labels: {
+            colors: ['white', 'white']
+          }
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              margin: 0,
+              size: '50%',
+              background: '#293450'
+            },
+            track: {
+              dropShadow: {
+                enabled: true,
+                top: 2,
+                left: 0,
+                blur: 4,
+                opacity: 0.15
+              }
+            },
+            dataLabels: {
+              name: {
+                fontSize: '22px',
+                color: 'white'
+              },
+              value: {
+                fontSize: '22px',
+                color: 'white'
+              },
+              total: {
+                show: true,
+                color: 'white',
+                label: 'SOC / SOH',
+                formatter: function (w) {
+                  return `${w.globals.series[0]}% / ${w.globals.series[1]}%`
+                  // return '19% / 100%'
+                }
+              }
+            }
+          }
+        },
+        labels: ['SOH', 'SOC']
+      },
       price_plans: [
         {
           title: '전력 요금재',
@@ -409,11 +524,11 @@ export default {
 }
 
 .middle-top {
-  height: 50%;
+  height: 45%;
 }
 
 .middle-bottom {
-  height: 50%;
+  height: 55%;
 }
 
 .mode-class {
