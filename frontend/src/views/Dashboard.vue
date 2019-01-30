@@ -360,21 +360,41 @@ export default {
           },
           dropShadow: {
             enabled: true,
-            top: 0,
-            left: 0,
-            blue: 3,
-            opacity: 0.5
+            opacity: 0.3,
+            blur: 5,
+            left: -7,
+            top: 22
           }
         },
+        /*
         grid: {
           row: {
             colors: ['#f3f3f3', 'transparent'],
             opacity: 0.5
           }
+        }, */
+        markers: {
+          size: 0,
+          hover: {
+            size: 0
+          }
+        },
+        stroke: {
+          curve: 'straight',
+          width: 5
+        },
+        grid: {
+          padding: {
+            left: 0,
+            right: 0
+          }
         },
         title: {
           text: 'Blah Blah Blah Data',
-          align: 'left'
+          align: 'left',
+          style: {
+            fontSize: '22px'
+          }
         },
         dataLabels: {
           enabled: false
@@ -385,8 +405,16 @@ export default {
         tooltip: {
           theme: 'dark'
         },
-        theme: {
-          palette: 'palette5'
+        legend: {
+          show: true,
+          floating: true,
+          horizontalAlign: 'left',
+          onItemClick: {
+            toggleDataSeries: false
+          },
+          position: 'top',
+          offsetY: -33,
+          offsetX: 60
         }
       },
       series: [
