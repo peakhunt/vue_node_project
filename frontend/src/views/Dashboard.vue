@@ -22,7 +22,7 @@
           <!-- left bottom -->
           <v-flex d-flex xs12>
             <v-card class="elevation-16">
-              <v-card-title class="light-blue--text title font-weight-bold">절감요금</v-card-title>
+              <v-card-title class="info--text title font-weight-bold">절감요금</v-card-title>
               <v-card-text>
                 <v-layout row>
                   <v-flex xs6>
@@ -44,7 +44,7 @@
 
           <v-flex d-flex xs12>
             <v-card class="elevation-16">
-              <v-card-title class="light-blue--text title font-weight-bold">피크저감관리</v-card-title>
+              <v-card-title class="info--text title font-weight-bold">피크저감관리</v-card-title>
               <v-card-text>
                 <v-layout row>
                   <v-flex xs6>
@@ -155,7 +155,7 @@
           <!-- right middle1 -->
           <v-flex d-flex xs12 class="right-middle1">
             <v-card class="elevation-16" raised>
-              <v-card-title class="title font-weight-bold light-blue--text">2월 13일</v-card-title>
+              <v-card-title class="title font-weight-bold info--text">2월 13일</v-card-title>
               <v-card-text>
                 <v-layout row wrap>
                   <v-flex d-flex xs6>
@@ -184,7 +184,7 @@
           <!-- right middle2 -->
           <v-flex d-flex xs12 class="right-middle2">
             <v-card class="elevation-16" raised>
-              <v-card-title class="title font-weight-bold light-blue--text">2월 누적량</v-card-title>
+              <v-card-title class="title font-weight-bold info--text">2월 누적량</v-card-title>
               <v-card-text>
                 <v-layout row wrap>
                   <v-flex d-flex xs6>
@@ -213,7 +213,7 @@
           <!-- right bottom -->
           <v-flex d-flex xs12 class="right-bottom">
             <v-card class="elevation-16" raised>
-              <v-card-title class="title font-weight-bold light-blue--text">ESS 설치후 누적량</v-card-title>
+              <v-card-title class="title font-weight-bold info--text">ESS 설치후 누적량</v-card-title>
               <v-card-text>
                 <v-layout row wrap>
                   <v-flex d-flex xs6>
