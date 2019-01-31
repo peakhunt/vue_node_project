@@ -90,13 +90,33 @@
           <v-flex d-flex xs12 class="middle-top">
             <v-layout row wrap>
               <!-- left -->
-              <v-flex d-flex xs9 sm9 md8 style="height: 100%">
-                <v-card class="elevation-16" height="100%">
+              <v-flex d-flex xs9 sm9 md8>
+                <v-card class="elevation-16" color="#82b1ff">
+                  <svg height="100%" width="100%" viewbox="0 0 1200 800">
+                    <power-line :x="155" :y="140" :width="300" :height="10"/>
+                    <power-line :x="270" :y="150" :width="10" :height="100"/>
+                    <power-line :x="330" :y="280" :width="120" :height="10"/>
+
+                    <power-direction :x="360" :y="270" :width="32" :height="32"/>
+                    <power-direction :x="400" :y="270" :width="32" :height="32" dir="right" />
+
+                    <power-direction :x="259" :y="160" :width="32" :height="32" dir="up" />
+                    <power-direction :x="259" :y="200" :width="32" :height="32" dir="down" />
+
+                    <power-direction :x="200" :y="130" :width="32" :height="32" dir="left" />
+                    <power-direction :x="350" :y="130" :width="32" :height="32" dir="left" />
+
+                    <battery :x="450" :y="250" :width="150" :height="75"/>
+                    <power-tower :x="50" :y="25" :width="150" :height="150"/>
+                    <factory :x="450" :y="25" :width="150" :height="150"/>
+                    <server :x="230" :y="235" :width="100" :height="100"/>
+                  </svg>
                 </v-card>
               </v-flex>
+
               <!-- right -->
               <v-flex d-flex xs3 sm3 md4>
-                <v-card class="elevation-16" height="100%">
+                <v-card class="elevation-16">
                   <!--
                     XXX: FIXME
                     why does adding height=100% here fuck up the whole chart including
@@ -267,11 +287,23 @@
 <script>
 import { mapGetters } from 'vuex'
 import VueApexCharts from 'vue-apexcharts'
+import Battery from '@/components/Battery'
+import PowerTower from '@/components/PowerTower'
+import Factory from '@/components/Factory'
+import Server from '@/components/Server'
+import PowerLine from '@/components/PowerLine'
+import PowerDirection from '@/components/PowerDirection'
 
 export default {
   name: 'Dashboard',
   components: {
-    'apexcharts': VueApexCharts
+    'apexcharts': VueApexCharts,
+    Battery,
+    PowerTower,
+    Factory,
+    Server,
+    PowerLine,
+    PowerDirection
   },
   computed: {
     ...mapGetters([
@@ -286,12 +318,12 @@ export default {
     }
   },
   mounted () {
-    var self = this
-    var inc = [ true, true ]
+    // var self = this
+    // var inc = [ true, true ]
 
     self.timer = setInterval(() => {
-      self.testRadialChart(inc)
-      self.testLineChart()
+      // self.testRadialChart(inc)
+      // self.testLineChart()
     }, 200)
   },
   beforeDestroy () {
