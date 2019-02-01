@@ -63,6 +63,6 @@ export default {
 
 <style scoped>
 path {
-  fill: #90A4AE;
+  fill: #00B0FF;
 }
 </style>

@@ -93,18 +93,18 @@
               <v-flex d-flex xs9 sm9 md8>
                 <v-card class="elevation-16">
                   <svg height="100%" width="100%" viewbox="0 0 1200 800">
-                    <power-line :x="155" :y="140" :width="300" :height="10"/>
-                    <power-line :x="270" :y="150" :width="10" :height="100"/>
-                    <power-line :x="330" :y="280" :width="120" :height="10"/>
+                    <power-line :x="155" :y="140" :width="300" :height="10" class="power-line" />
+                    <power-line :x="270" :y="150" :width="10" :height="100" class="power-line" />
+                    <power-line :x="330" :y="280" :width="120" :height="10" class="power-line" />
 
-                    <power-direction :x="360" :y="270" :width="32" :height="32"/>
-                    <power-direction :x="400" :y="270" :width="32" :height="32" dir="right" />
+                    <power-direction :x="360" :y="270" :width="32" :height="32" class="power-direction" />
+                    <power-direction v-if="false" :x="400" :y="270" :width="32" :height="32" dir="right" class="power-direction" />
 
-                    <power-direction :x="259" :y="160" :width="32" :height="32" dir="up" />
-                    <power-direction :x="259" :y="200" :width="32" :height="32" dir="down" />
+                    <power-direction v-if="false" :x="259" :y="160" :width="32" :height="32" dir="up" class="power-direction" />
+                    <power-direction :x="259" :y="180" :width="32" :height="32" dir="down" class="power-direction" />
 
-                    <power-direction :x="200" :y="130" :width="32" :height="32" dir="left" />
-                    <power-direction :x="350" :y="130" :width="32" :height="32" dir="left" />
+                    <power-direction :x="200" :y="130" :width="32" :height="32" dir="left" class="power-direction" />
+                    <power-direction v-if="false" :x="350" :y="130" :width="32" :height="32" dir="left" class="power-direction" />
 
                     <battery :x="450" :y="250" :width="150" :height="75" :value="batteryLevel"/>
                     <power-tower :x="50" :y="25" :width="150" :height="150"/>
@@ -131,8 +131,8 @@
                     </text>
 
                     <rect x="477" y="345" rx="5" ry="5" width="80" height="20" fill="none" stroke="white" />
-                    <text text-anchor="end" x="537" y="360" class="svg-text-small-border">
-                      {{batteryLevel}}&nbsp;kW
+                    <text text-anchor="end" x="540" y="360" class="svg-text-small-border">
+                      {{batteryLevel}}&nbsp;kWh
                     </text>
                   </svg>
                 </v-card>
@@ -675,5 +675,13 @@ export default {
 .svg-text-heavy {
   font: 30px sans-serif;
   fill: white;
+}
+
+.power-line {
+  fill: #76FF03;
+}
+
+.power-direction {
+  fill: #76FF03;
 }
 </style>
