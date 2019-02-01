@@ -110,6 +110,30 @@
                     <power-tower :x="50" :y="25" :width="150" :height="150"/>
                     <factory :x="450" :y="25" :width="150" :height="150"/>
                     <server :x="230" :y="235" :width="100" :height="100"/>
+
+                    <text text-anchor="end" x="550" y="300" class="svg-text-heavy">
+                      {{batteryLevel}}%
+                    </text>
+
+                    <rect x="92" y="185" rx="5" ry="5" width="60" height="20" fill="none" stroke="white" />
+                    <text text-anchor="end" x="138" y="200" class="svg-text-small-border">
+                      {{batteryLevel}}&nbsp;kV
+                    </text>
+
+                    <rect x="490" y="185" rx="5" ry="5" width="80" height="20" fill="none" stroke="white" />
+                    <text text-anchor="end" x="552" y="200" class="svg-text-small-border">
+                      {{batteryLevel}}&nbsp;kW
+                    </text>
+
+                    <rect x="242" y="345" rx="5" ry="5" width="80" height="20" fill="none" stroke="white" />
+                    <text text-anchor="end" x="302" y="360" class="svg-text-small-border">
+                      {{batteryLevel}}&nbsp;kW
+                    </text>
+
+                    <rect x="477" y="345" rx="5" ry="5" width="80" height="20" fill="none" stroke="white" />
+                    <text text-anchor="end" x="537" y="360" class="svg-text-small-border">
+                      {{batteryLevel}}&nbsp;kW
+                    </text>
                   </svg>
                 </v-card>
               </v-flex>
@@ -631,5 +655,25 @@ export default {
 .opr-status {
   font-size: 80px;
   color: #B2FF59;
+}
+
+.svg-text-small {
+  font: italic 13px sans-serif;
+  fill: white;
+}
+
+.svg-text-small-border {
+  font: italic 13px sans-serif;
+  fill: white;
+  paint-order: stroke;
+  stroke: #000000;
+  stroke-width: 1px;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.svg-text-heavy {
+  font: 30px sans-serif;
+  fill: white;
 }
 </style>

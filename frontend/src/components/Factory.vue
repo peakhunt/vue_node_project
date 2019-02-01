@@ -24,4 +24,7 @@ export default {
 </script>
 
 <style scoped>
+path {
+  fill: #00E676;
+}
 </style>
